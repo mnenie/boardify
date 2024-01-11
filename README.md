@@ -8,6 +8,7 @@
 <img src="https://github.com/devicons/devicon/blob/master/icons/typescript/typescript-original.svg" title="ts" alt="ts" width="40" height="40"/>&nbsp;
 <img src="https://github.com/devicons/devicon/blob/master/icons/tailwindcss/tailwindcss-plain.svg" title="tailwind" alt="tailwind" width="40" height="40"/>&nbsp;
 <img src="https://github.com/devicons/devicon/blob/master/icons/appwrite/appwrite-original.svg" title="appwrite" alt="appwrite" width="40" height="40"/>&nbsp;
+<img src="https://github.com/devicons/devicon/blob/master/icons/socketio/socketio-original.svg" title="socketio" alt="soketio" width="40" height="40"/>&nbsp;
 
 ###
 ___About:___ 
