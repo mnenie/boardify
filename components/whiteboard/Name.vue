@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Settings, Share2, Plus, Share} from 'lucide-vue-next'
+import {Settings, Share2 } from 'lucide-vue-next'
 </script>
 
 <template>
@@ -11,8 +11,9 @@ import {Settings, Share2, Plus, Share} from 'lucide-vue-next'
       <div class="rounded-full bg-green-600 w-2 h-2"></div>
     </div>
     <div class="h-5 w-px bg-gray-400 mr-2"></div>
-    <Plus :size="22" :stroke-width="1.8" />
-    <Settings :size="20" :stroke-width="1.8" />
-    <Share2 :size="18" :stroke-width="1.8" />
+    <WhiteboardChangeSheet>
+      <Settings class="cursor-pointer" :size="20" :stroke-width="1.8" />
+    </WhiteboardChangeSheet>
+    <Share2 class="cursor-pointer" :size="18" :stroke-width="1.8" />
   </div>
 </template>
