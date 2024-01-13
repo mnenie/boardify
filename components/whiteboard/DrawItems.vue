@@ -1,39 +1,40 @@
 <script setup lang="ts">
-import { Eraser, Highlighter, Ruler, PenTool, Pen, Palette } from 'lucide-vue-next';
+import type { ChangeColorMethods } from '~/types/methods.type';
+import type { IDrawUi } from '~/types/ui.interfase';
+const injectedMethods: ChangeColorMethods | undefined = inject('changeColor');
+const { changeEraser, changePen, changeHighlighterBlack, changePencilBlack, changePencilRed, changePencilGreen, changePencilBlue, changePencilPurple, changeHighlighterRed } = injectedMethods || {};
 
-const { changeEraser, changePen, changeHighlighter, changePenTool, changePalette } = inject('changeColor')
-
-const items = ref([
-  { id: 0, active: false, name: Eraser, event: changeEraser, size: 24, strokeWidth: 2 },
-  { id: 1, active: false, name: Highlighter, event: changeHighlighter, size: 24, strokeWidth: 2 },
-  { id: 2, active: false, name: PenTool, event: changePenTool, size: 24, strokeWidth: 2 },
-  { id: 3, active: true, name: Pen, event: changePen, size: 24, strokeWidth: 2 },
-  { id: 4, active: false, name: Palette, event: changePalette, size: 24, strokeWidth: 2 },
+const draws = ref<IDrawUi[]>([
+  { id: 0, src: '/img/eraser.jpg', active: false, event: changeEraser },
+  { id: 1, src: '/img/pen.jpg', active: false, event: changePen },
+  { id: 2, src: '/img/black.jpg', active: true, event: changePencilBlack },
+  { id: 3, src: '/img/red.jpg', active: false, event: changePencilRed },
+  { id: 4, src: '/img/green.jpg', active: false, event: changePencilGreen },
+  { id: 5, src: '/img/purple.jpg', active: false, event: changePencilPurple },
+  { id: 6, src: '/img/blue.jpg', active: false, event: changePencilBlue },
+  { id: 7, src: '/img/marker-black.jpg', active: false, event: changeHighlighterBlack },
+  { id: 8, src: '/img/marker-red.jpg', active: false, event: changeHighlighterRed },
 ])
 
-
-const changeEvent = (id: number) => {
-  const selectedButton = items.value.find(btn => btn.id === id);
-  if(selectedButton){
-    selectedButton.event()
-  }
-  items.value.map((btn, i) => {
+const changeActiveElement = (id: number) => {
+  const selectedElement = draws.value.find(i => i.id == id)
+  selectedElement && selectedElement.event && selectedElement.event();
+  draws.value.map((btn, i) => {
     btn.active = i === id
   })
+
 }
 </script>
 
 <template>
   <div
-    class="flex gap-2 items-center p-3 fixed bg-white rounded-md shadow-xl bottom-2 right-1/2 translate-x-1/2 h-14 overflow-hidden">
-    <div class="rounded-md p-3" v-for="i in items" :class="{ 'active': i.active }">
-      <component :key="i.id" :is="i.name" @click="changeEvent(i.id);" :size="i.size" :stroke-width="i.strokeWidth" :color="i.active ? 'rgb(5 150 105)' : 'currentColor'" class="cursor-pointer" />
-    </div>
+    class="flex gap-8 items-center p-3 fixed bg-white rounded-md shadow-xl bottom-2 right-1/2 translate-x-1/2 h-14 overflow-hidden">
+    <NuxtImg v-for="item in draws" @click="changeActiveElement(item.id)" class="mt-14 w-7 h-24 transition duration-300 ease-in cursor-pointer" :src="item.src" :class="{'active' : item.active}" />
   </div>
 </template>
 
 <style scoped>
-.active {
-  background-color: rgba(110, 231, 183, 0.1);
+.active{
+  margin-top: 34px;
 }
 </style>
