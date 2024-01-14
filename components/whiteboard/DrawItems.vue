@@ -22,7 +22,6 @@ const changeActiveElement = (id: number) => {
   draws.value.map((btn, i) => {
     btn.active = i === id
   })
-
 }
 </script>
 

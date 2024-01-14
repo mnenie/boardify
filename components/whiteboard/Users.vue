@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { LogOut } from 'lucide-vue-next';
-const emit = defineEmits<{
-  (e: 'logout'): void
-}>()
+
+const authStore = useAuthStore()
+const logout = async () => {
+  await authStore.logout()
+}
 </script>
 
 <template>
@@ -11,6 +13,6 @@ const emit = defineEmits<{
       <span class="text-white text-lg font-normal">A</span>
     </div>
     <div class="h-5 w-px bg-gray-400 mr-2"></div>
-    <LogOut class="cursor-pointer" @click="emit('logout')" :size="19" :stroke-width="1.8" />
+    <LogOut class="cursor-pointer" @click="logout" :size="19" :stroke-width="1.8" />
   </div>
 </template>

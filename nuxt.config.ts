@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     "shadcn-nuxt",
     "@formkit/auto-animate/nuxt",
     "@nuxt/image",
+    '@vueuse/nuxt',
   ],
   shadcn: {
     prefix: "Ui",
