@@ -26,7 +26,7 @@ const onDraw = () => {
 </script>
 
 <template>
-  <div class="bg-gray-50 h-screen w-screen relative flex justify-center items-center overflow-hidden">
+  <div class="bg-gray-50 relative w-screen h-screen">
     <WhiteboardCanvas :color="color" :line="line" :radius="radius" :is-draggable="isDragg" />
     <WhiteboardName />
     <WhiteboardDrawSettings @on-dragg="onDragg" @on-draw="onDraw" />
@@ -36,4 +36,7 @@ const onDraw = () => {
     <WhiteboardDrawItems />
   </div>
 </template>
+
+<style scoped>
+</style>
 
