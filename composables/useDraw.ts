@@ -49,18 +49,12 @@ export default function useDraw(
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   };
 
-  const gridDraw = () => {};
-
   onMounted(() => {
     if (canvasRef.value) {
-      const canvas = canvasRef.value;
-      context.value = canvas.getContext("2d");
-      if (context.value) {
-        canvas.width = canvas.clientWidth;
-        canvas.height = canvas.clientHeight;
-        canvas.addEventListener("mousemove", onMouseMove);
-        window.addEventListener("mouseup", onMouseEnd);
-      }
+      canvasRef.value.width = canvasRef.value.clientWidth;
+      canvasRef.value.height = canvasRef.value.clientHeight;
+      canvasRef.value?.addEventListener("mousemove", onMouseMove);
+      window.addEventListener("mouseup", onMouseEnd);
     }
   });
   onUnmounted(() => {
@@ -73,6 +67,5 @@ export default function useDraw(
     onMouseEnd,
     onMouseMove,
     clear,
-    context,
   };
 }
