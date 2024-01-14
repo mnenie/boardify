@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { IDraw } from '~/types/draw.interface';
 import { CANVAS_SIZE } from '~/utils/consts';
+import { onMounted } from 'vue';
 
 const props = defineProps<{
   line: number,
@@ -10,7 +11,7 @@ const props = defineProps<{
 }>()
 
 
-const { onMouseMove, onMouseDown, onMouseEnd, canvasRef } = useDraw(drawLine,)
+const { onMouseMove, onMouseDown, onMouseEnd, canvasRef, drawGrid } = useDraw(drawLine,)
 function drawLine({ prevPoint, currentPoint, ctx }: IDraw) {
   const { x: currX, y: currY } = currentPoint
   const lineColor = props.color
@@ -30,8 +31,13 @@ function drawLine({ prevPoint, currentPoint, ctx }: IDraw) {
   ctx.arc(Math.round(startPoint.x), Math.round(startPoint.y), props.radius, 0, props.radius * Math.PI)
   ctx.fill()
 }
+
+onMounted(() =>{
+  drawGrid()
+})
+
 </script>
 <template>
   <canvas ref="canvasRef"
-    @mousedown="onMouseDown" @mouseup="onMouseEnd" @mousemove="onMouseMove" class="position: fixed w-full h-full"></canvas>
+    @mousedown="onMouseDown" @mouseup="onMouseEnd" @mousemove="onMouseMove" class="relative w-full h-full"></canvas>
 </template>

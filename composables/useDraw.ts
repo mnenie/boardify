@@ -49,6 +49,29 @@ export default function useDraw(
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   };
 
+  const drawGrid = () => {
+    const canvas = canvasRef.value;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "rgb(229, 231, 235)";
+    const gridSize = 20;
+
+    for (let x = 0; x <= canvas.width; x += gridSize) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, canvas.height);
+      ctx.stroke();
+    }
+    for (let y = 0; y <= canvas.height; y += gridSize) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(canvas.width, y);
+      ctx.stroke();
+    }
+  };
+
   onMounted(() => {
     if (canvasRef.value) {
       canvasRef.value.width = canvasRef.value.clientWidth;
@@ -67,5 +90,6 @@ export default function useDraw(
     onMouseEnd,
     onMouseMove,
     clear,
+    drawGrid,
   };
 }

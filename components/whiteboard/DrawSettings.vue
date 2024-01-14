@@ -12,7 +12,6 @@ const emits = defineEmits<{
   <div class="flex gap-4 items-center flex-col p-3 w-14 fixed bg-white rounded-md shadow-xl top-1/2 left-2 -translate-y-1/2">
     <Move @click="emits('onDragg')" />
     <MousePointer2 @click="emits('onDraw')" />
-    <PaintBucket />
     <Save />
     <Square />
     <Grid3X3 />
