@@ -6,8 +6,8 @@ const { changeEraser, changePen, changeHighlighterBlack, changePencilBlack, chan
 
 const draws = ref<IDrawUi[]>([
   { id: 0, src: '/img/eraser.jpg', active: false, event: changeEraser },
-  { id: 1, src: '/img/pen.jpg', active: false, event: changePen },
-  { id: 2, src: '/img/black.jpg', active: true, event: changePencilBlack },
+  { id: 1, src: '/img/pen.jpg', active: true, event: changePen },
+  { id: 2, src: '/img/black.jpg', active: false, event: changePencilBlack },
   { id: 3, src: '/img/red.jpg', active: false, event: changePencilRed },
   { id: 4, src: '/img/green.jpg', active: false, event: changePencilGreen },
   { id: 5, src: '/img/purple.jpg', active: false, event: changePencilPurple },

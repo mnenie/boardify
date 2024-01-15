@@ -9,8 +9,8 @@ export default function useUiDraw({ color, line, radius }: ISettingsUiDraw) {
 
   const changePen = () => {
     color.value = "#000";
-    line.value = 3;
-    radius.value = 1;
+    line.value = 3.3;
+    radius.value = 0.2;
   };
 
   const changeHighlighterBlack = () => {

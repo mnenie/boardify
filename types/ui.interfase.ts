@@ -1,8 +1,12 @@
-export interface IDrawUi {
+export interface IDrawSettings{
   id: number;
-  active: boolean;
+  active?: boolean;
+  event?:() => void;
+  icon?: any;
+}
+
+export interface IDrawUi extends IDrawSettings{
   src: string;
-  event?: () => void;
 }
 
 export interface ISettingsUiDraw {

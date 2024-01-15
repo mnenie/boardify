@@ -1,43 +1,49 @@
 <script setup lang="ts">
-import type { IDraw } from '~/types/draw.interface';
-import { CANVAS_SIZE } from '~/utils/consts';
 import { onMounted } from 'vue';
 
-const props = defineProps<{
+type IProps = {
   line: number,
   color: string,
   radius: number,
-  isDraggable: boolean
+  isDraggable: boolean,
+  isGrid: boolean,
+  onSave: boolean
+}
+const props = defineProps<IProps>()
+
+const emit = defineEmits<{
+  (e: 'imageStateReset'): void
 }>()
 
+const { drawLine } = useDrawLine(toRef(props, 'color'), toRef(props, 'radius'), toRef(props, 'line'));
+const { onMouseMove, onMouseDown, onMouseEnd, canvasRef, drawGrid, hideGrid, saveImage } = useDraw(drawLine)
 
-const { onMouseMove, onMouseDown, onMouseEnd, canvasRef, drawGrid } = useDraw(drawLine,)
-function drawLine({ prevPoint, currentPoint, ctx }: IDraw) {
-  const { x: currX, y: currY } = currentPoint
-  const lineColor = props.color
-  const lineWidth = props.line
-
-  let startPoint = prevPoint ?? currentPoint
-  ctx.beginPath()
-  ctx.lineWidth = lineWidth
-  ctx.strokeStyle = lineColor
-  ctx.moveTo(Math.round(startPoint.x), Math.round(startPoint.y))
-  ctx.lineTo(Math.round(currX), Math.round(currY))
-  ctx.stroke()
-  ctx.imageSmoothingEnabled = false;
-  const fillColor = props.color
-  ctx.fillStyle = fillColor
-  ctx.beginPath()
-  ctx.arc(Math.round(startPoint.x), Math.round(startPoint.y), props.radius, 0, props.radius * Math.PI)
-  ctx.fill()
-}
-
-onMounted(() =>{
-  drawGrid()
+onMounted(async () => {
+  await drawGrid()
 })
 
+watch(() => props.isGrid, (newValue) => {
+  if (canvasRef.value) {
+    if (newValue) {
+      drawGrid();
+    } else {
+      hideGrid();
+    }
+  }
+}, { immediate: true });
+
+watch(() => props.onSave, (newValue) => {
+  if (canvasRef.value) {
+    if (newValue) {
+      saveImage();
+      emit('imageStateReset');
+    }
+  }
+}, {immediate: true});
 </script>
 <template>
-  <canvas ref="canvasRef"
-    @mousedown="onMouseDown" @mouseup="onMouseEnd" @mousemove="onMouseMove" class="relative w-full h-full"></canvas>
+  <div class="relative w-full h-full">
+    <canvas ref="canvasRef" @mousedown="onMouseDown" @mouseup="onMouseEnd" @mousemove="onMouseMove"
+      class="relative w-full h-full" />
+  </div>
 </template>

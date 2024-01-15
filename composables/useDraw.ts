@@ -50,7 +50,7 @@ export default function useDraw(
   };
 
   const drawGrid = () => {
-    const canvas = canvasRef.value;
+    const canvas = canvasRef.value!;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -69,6 +69,30 @@ export default function useDraw(
       ctx.moveTo(0, y);
       ctx.lineTo(canvas.width, y);
       ctx.stroke();
+    }
+  };
+
+  const hideGrid = () => {
+    const canvas = canvasRef.value!;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const gridSize = 20;
+    for (let x = 0; x <= canvas.width; x += gridSize) {
+      ctx.clearRect(x - 1, 0, 2, canvas.height);
+    }
+    for (let y = 0; y <= canvas.height; y += gridSize) {
+      ctx.clearRect(0, y - 1, canvas.width, 2);
+    }
+  };
+
+  const saveImage = () => {
+    if (canvasRef.value) {
+      const canvas = canvasRef.value;
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/png");
+      link.download = "canvas.png";
+      link.click();
     }
   };
 
@@ -91,5 +115,7 @@ export default function useDraw(
     onMouseMove,
     clear,
     drawGrid,
+    hideGrid,
+    saveImage
   };
 }
