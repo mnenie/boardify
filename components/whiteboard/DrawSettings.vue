@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Move, Save, MousePointer2, Square, Grid3X3, ArrowUpFromLine, FileUp } from 'lucide-vue-next';
+import { Save, MousePointer2, Square, Grid3X3, FileUp } from 'lucide-vue-next';
 import type { IDrawSettings } from '~/types/ui.interfase';
 
 const emits = defineEmits<{

@@ -44,6 +44,6 @@ watch(() => props.onSave, (newValue) => {
 <template>
   <div class="relative w-full h-full">
     <canvas ref="canvasRef" @mousedown="onMouseDown" @mouseup="onMouseEnd" @mousemove="onMouseMove"
-      class="relative w-full h-full" />
+      class="relative w-full h-full dark:bg-neutral-800" />
   </div>
 </template>

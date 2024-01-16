@@ -1,4 +1,3 @@
-import { IDraw } from '../types/draw.interface';
 <script setup lang="ts">
 useSeoMeta({
   title: 'Boardify - virtual whiteboard for collaborative solutions'

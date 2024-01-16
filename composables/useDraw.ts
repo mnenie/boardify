@@ -49,13 +49,23 @@ export default function useDraw(
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   };
 
+  const { isDark } = useMode();
+  const isHide = ref(false)
+
   const drawGrid = () => {
+    isHide.value = false
+    if(isHide.value) return
     const canvas = canvasRef.value!;
+    if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.lineWidth = 1;
-    ctx.strokeStyle = "rgb(229, 231, 235)";
+    const gridColor = computed(() =>
+      isDark.value ? "rgba(64, 64, 64, 0.4)" : "rgb(229, 231, 235)"
+    );
+    ctx.strokeStyle = gridColor.value;
+
     const gridSize = 20;
 
     for (let x = 0; x <= canvas.width; x += gridSize) {
@@ -73,6 +83,7 @@ export default function useDraw(
   };
 
   const hideGrid = () => {
+    isHide.value = true
     const canvas = canvasRef.value!;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -85,6 +96,16 @@ export default function useDraw(
       ctx.clearRect(0, y - 1, canvas.width, 2);
     }
   };
+
+  watch(
+    [isDark, isHide],
+    ([darkValue, hideValue]) => {
+      if (!hideValue) {
+        drawGrid();
+      }
+    },
+    { immediate: true }
+  );
 
   const saveImage = () => {
     if (canvasRef.value) {
@@ -116,6 +137,6 @@ export default function useDraw(
     clear,
     drawGrid,
     hideGrid,
-    saveImage
+    saveImage,
   };
 }
