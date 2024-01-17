@@ -1,8 +1,12 @@
 import type { ISettingsUiDraw } from "~/types/ui.interfase";
 
 export default function useUiDraw({ color, line, radius }: ISettingsUiDraw) {
+  const {isDark} = useMode()
   const changeEraser = () => {
-    color.value = "rgb(249 250 251)";
+    const colorErase = computed(() => {
+      return isDark.value ? "rgb(38 38 38)" : "rgb(249 250 251)"
+    });
+    color.value = colorErase.value;
     line.value = 14;
     radius.value = 7;
   };

@@ -19,7 +19,7 @@ provide('saveImage', {saveImage})
 </script>
 
 <template>
-  <div class="bg-gray-50 relative w-screen h-screen">
+  <div class="bg-gray-50 relative w-screen h-screen board">
     <WhiteboardCanvas :color="color" :line="line" :radius="radius" :is-draggable="isDragg" :is-grid="isGrid" :on-save="isSave" @image-state-reset="resetImage" />
     <WhiteboardName />
     <WhiteboardDrawSettings @on-save="saveImage" @on-dragg="onDragg" @on-draw="onDraw" @on-grid="onGrid" @delete-grid="deleteGrid" />
@@ -30,5 +30,11 @@ provide('saveImage', {saveImage})
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.board{
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+}
+</style>
 

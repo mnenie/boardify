@@ -1,4 +1,3 @@
-import { Ref } from "vue"
 import type { IDraw } from "~/types/draw.interface"
 
 export default function useDrawLine(color: Ref<string>, radius: Ref<number>, line: Ref<number>) {

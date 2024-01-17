@@ -14,9 +14,9 @@ const props = defineProps<IProps>()
 const emit = defineEmits<{
   (e: 'imageStateReset'): void
 }>()
-
+const canvasRef = ref<HTMLCanvasElement | null>(null);
 const { drawLine } = useDrawLine(toRef(props, 'color'), toRef(props, 'radius'), toRef(props, 'line'));
-const { onMouseMove, onMouseDown, onMouseEnd, canvasRef, drawGrid, hideGrid, saveImage } = useDraw(drawLine)
+const { onMouseMove, onMouseDown, onMouseEnd, drawGrid, hideGrid, saveImage} = useDraw(drawLine, canvasRef)
 
 onMounted(async () => {
   await drawGrid()
@@ -39,7 +39,7 @@ watch(() => props.onSave, (newValue) => {
       emit('imageStateReset');
     }
   }
-}, {immediate: true});
+}, { immediate: true });
 </script>
 <template>
   <div class="relative w-full h-full">

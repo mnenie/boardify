@@ -1,9 +1,9 @@
 import type { IDraw, Point } from "~/types/draw.interface";
 
 export default function useDraw(
-  onDraw: ({ ctx, currentPoint, prevPoint }: IDraw) => void
+  onDraw: ({ ctx, currentPoint, prevPoint }: IDraw) => void,
+  canvasRef: Ref<HTMLCanvasElement | null>
 ) {
-  const canvasRef = ref<HTMLCanvasElement | null>(null);
   const drawing = ref(false);
   const context = ref<CanvasRenderingContext2D | null>(null);
   const prevPoint = ref<null | Point>(null);
@@ -50,11 +50,11 @@ export default function useDraw(
   };
 
   const { isDark } = useMode();
-  const isHide = ref(false)
+  const isHide = ref(false);
 
   const drawGrid = () => {
-    isHide.value = false
-    if(isHide.value) return
+    isHide.value = false;
+    if (isHide.value) return;
     const canvas = canvasRef.value!;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -83,7 +83,7 @@ export default function useDraw(
   };
 
   const hideGrid = () => {
-    isHide.value = true
+    isHide.value = true;
     const canvas = canvasRef.value!;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -116,27 +116,19 @@ export default function useDraw(
       link.click();
     }
   };
-
   onMounted(() => {
     if (canvasRef.value) {
       canvasRef.value.width = canvasRef.value.clientWidth;
       canvasRef.value.height = canvasRef.value.clientHeight;
-      canvasRef.value?.addEventListener("mousemove", onMouseMove);
-      window.addEventListener("mouseup", onMouseEnd);
     }
   });
-  onUnmounted(() => {
-    canvasRef.value?.removeEventListener("mousemove", onMouseMove);
-    window.removeEventListener("mouseup", onMouseEnd);
-  });
   return {
-    canvasRef,
     onMouseDown,
     onMouseEnd,
     onMouseMove,
     clear,
     drawGrid,
     hideGrid,
-    saveImage,
+    saveImage
   };
 }
