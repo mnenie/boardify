@@ -3,9 +3,6 @@ useSeoMeta({
   title: 'Boardify - virtual whiteboard for collaborative solutions'
 })
 
-definePageMeta({
-  middleware: 'auth'
-})
 const color = ref<string>("#000");
 const line = ref<number>(3.3);
 const radius = ref<number>(0.2);
@@ -16,7 +13,7 @@ provide('changeColor', { changeEraser, changePen, changeHighlighterBlack, change
 
 const { saveImage, resetImage, isDragg, isGrid, isSave, onDragg, onDraw, onGrid, deleteGrid } = useUiSettingsDraw()
 
-const {isExperimental, onExperimental} = useExperimentalFeatures()
+const { isExperimental, onExperimental } = useExperimentalFeatures()
 
 provide('saveImage', { saveImage })
 </script>

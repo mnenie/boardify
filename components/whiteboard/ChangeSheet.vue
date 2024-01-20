@@ -1,5 +1,8 @@
 <script setup lang="ts">
-
+const emit = defineEmits(['update:project'])
+const props = defineProps<{
+  project: string
+}>()
 </script>
 
 <template>
@@ -8,13 +11,18 @@
       <slot />
     </UiSheetTrigger>
     <UiSheetContent :side="'bottom'">
-      <UiSheetHeader>
+      <UiSheetHeader class="mb-6">
         <UiSheetTitle>Are you sure absolutely sure?</UiSheetTitle>
         <UiSheetDescription>
-          This action cannot be undone. This will permanently delete your account
-          and remove your data from our servers.
+          This action provide rename your project-name
         </UiSheetDescription>
       </UiSheetHeader>
+      <UiInput class="mb-4" :model-value="project" @input="emit('update:project', ($event.target as HTMLInputElement).value)" />
+      <UiSheetClose as-child>
+          <UiButton type="submit">
+            Rename
+          </UiButton>
+        </UiSheetClose>
     </UiSheetContent>
   </UiSheet>
 </template>

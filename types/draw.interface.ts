@@ -5,3 +5,9 @@ export interface IDraw {
 }
 
 export type Point = { x: number, y: number}
+
+export interface IDrawLine extends IDraw{
+  color: Ref<string>
+  radius: number
+  line: number
+}

@@ -1,8 +1,8 @@
 import type { IDraw } from "~/types/draw.interface"
 
-export default function useDrawLine(color: Ref<string>, radius: Ref<number>, line: Ref<number>) {
+export default function useDrawLine() {
   const drawElements = ref<Array<{ style: { color: string; radius: number; line: number }; points: { x: number; y: number }[] }>>([]);
-  const drawLine = ({ prevPoint, currentPoint, ctx }: IDraw) => {
+  const drawLine = ({ prevPoint, currentPoint, ctx, }: IDraw, color: Ref<string>, radius: Ref<number>, line: Ref<number>) => {
     const { x: currX, y: currY } = currentPoint
     const lineColor = color.value
     const lineWidth = line.value

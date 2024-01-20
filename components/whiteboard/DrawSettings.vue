@@ -20,7 +20,7 @@ const settingsGrids = ref<IDrawSettings[]>([
 
 //experimental feature onDragg
 const settingsMove = ref<IDrawSettings[]>([
-  { id: 0, active: false, icon: Move, event:() => emits('onDragg') },
+  // { id: 0, active: false, icon: Move, event:() => emits('onDragg') },
   { id: 1, active: true, icon: MousePointer2, event:() => emits('onDraw') },
 ])
 const settingsFiles = ref<IDrawSettings[]>([
