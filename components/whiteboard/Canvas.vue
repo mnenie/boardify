@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { io } from 'socket.io-client';
-import type { IDrawLine } from '~/types/draw.interface';
 import type { IDraw } from '~/types/draw.interface';
+import type { IDrawLine } from '~/types/draw.interface';
 
 type IProps = {
   line: number,
@@ -65,15 +65,15 @@ watchEffect(() => {
       ctx?.drawImage(img, 0, 0)
     }
   })
-  socket.on('draw-line', ({ prevPoint, currentPoint, color, radius, line}: IDrawLine) => {
-    if (!ctx) return console.log('err')
-    drawLine({ prevPoint, currentPoint, ctx }, toRef(props, 'color'), toRef(props, 'radius'), toRef(props, 'line'))
-  })
+  socket.on('draw-line', ({ prevPoint, currentPoint, color, radius, line }: IDrawLine) => {
+    if (!ctx) return console.log('err');
+    drawLine({ prevPoint, currentPoint, ctx }, toRef(props.color), toRef(props.radius), toRef(props.line));
+  });
 })
 
-function createLine({ prevPoint, currentPoint, ctx }: IDraw){
-  socket.emit('draw-line', {prevPoint, currentPoint})
-  drawLine({ prevPoint, currentPoint, ctx}, toRef(props, 'color'), toRef(props, 'radius'), toRef(props, 'line'))
+function createLine({ prevPoint, currentPoint, ctx }: IDraw) {
+  socket.emit('draw-line', { prevPoint, currentPoint, color: toRef(props, 'color'), radius: toRef(props, 'radius'), line: toRef(props, 'line') })
+  drawLine({ prevPoint, currentPoint, ctx }, toRef(props, 'color'), toRef(props, 'radius'), toRef(props, 'line'))
 }
 </script>
 <template>
