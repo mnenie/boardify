@@ -41,12 +41,30 @@ export const useAuthStore = defineStore("auth", () => {
     await router.push(LOGIN_ROUTE)
   };
 
+  const getAccount = async () => {
+    try {
+      const currentUser = await account.get()
+      if (currentUser) {
+        user.value = {
+          id: currentUser.$id,
+          name: currentUser.name,
+          email: currentUser.email,
+          status: currentUser.status,
+        } as IUser;
+        isLogin.value = true;
+      }
+    } catch (e) {
+      console.log(e);
+      await router.push(LOGIN_ROUTE)
+    }
+  }
 
   return {
     user,
     registration,
     logout,
     login,
-    isLogin
+    isLogin,
+    getAccount
   };
 });
