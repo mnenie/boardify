@@ -14,4 +14,5 @@
 ___About:___ 
 Boardify - virtual whiteboard for collaborative solutions
 
+<img src="/public/about/boardify.png" title="index" alt="index" />
 </div>
