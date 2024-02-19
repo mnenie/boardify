@@ -1,9 +1,6 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-  <div class="flex w-full content_form">
+  <div class="flex w-full relative">
+    <div class="content_form w-1/2 h-screen" />
     <AuthCard />
   </div>
 </template>
@@ -13,8 +10,6 @@
   animation: gradient 15s ease infinite;
   background: linear-gradient(-45deg, #f0f0f0, #e9e9e9, #2e2e2e, #161616);
   background-size: 400% 400%;
-  width: 100%;
-  height: 100vh;
 }
 
 @keyframes gradient {

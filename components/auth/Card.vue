@@ -8,13 +8,13 @@ if(route.path === LOGIN_ROUTE){
 </script>
 
 <template>
-  <div class="h-screen w-full flex justify-center items-center">
-    <UiCard class="flex-col max-w-screen-sm w-full">
-      <UiCardHeader>
-        <UiCardTitle>{{ isLogin ? 'Welcome back' : 'Get started' }}</UiCardTitle>
-        <UiCardDescription>{{ isLogin ? 'Sign in to your account' : 'Create a new account' }}</UiCardDescription>
+  <div class="h-screen w-1/2 flex justify-center items-center">
+    <UiCard class="flex-col w-3/4 items-center">
+      <UiCardHeader class="flex items-center">
+        <UiCardTitle class="mb-px">{{ isLogin ? 'Welcome back' : 'Get started' }}</UiCardTitle>
+        <UiCardDescription>{{ isLogin ? 'Enter your info below to sign in your account' : 'Enter your info below to create your account' }}</UiCardDescription>
       </UiCardHeader>
-      <UiCardContent>
+      <UiCardContent class="flex items-center">
         <AuthFormLogin v-if="isLogin" />
         <AuthFormRegistration v-if="!isLogin" />
       </UiCardContent>

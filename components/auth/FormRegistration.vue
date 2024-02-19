@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {v4 as uuid} from 'uuid'
+import { v4 as uuid } from 'uuid'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import { useForm } from 'vee-validate'
@@ -8,9 +8,9 @@ const authStore = useAuthStore()
 const router = useRouter()
 
 const formSchema = toTypedSchema(z.object({
-  name: z.string({required_error: 'Name is a required field'}).nonempty('Name is a required field').min(2).max(40),
-  email: z.string({required_error: 'Email is a required field'}).nonempty('Email is a required field').email('Email must be a valid'),
-  password: z.string({required_error: 'Password is a required field'}).nonempty('Password is a required field').min(8, 'Password must be at least 8 characters')
+  name: z.string({ required_error: 'Name is a required field' }).nonempty('Name is a required field').min(2).max(40),
+  email: z.string({ required_error: 'Email is a required field' }).nonempty('Email is a required field').email('Email must be a valid'),
+  password: z.string({ required_error: 'Password is a required field' }).nonempty('Password is a required field').min(8, 'Password must be at least 8 characters')
 }))
 const { handleSubmit } = useForm({
   validationSchema: formSchema,
@@ -29,7 +29,7 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-  <form @submit.prevent="onSubmit">
+  <form class="w-full">
     <UiFormField v-slot="{ componentField }" name="name">
       <UiFormItem class="mb-4" v-auto-animate>
         <UiFormLabel>Name</UiFormLabel>
@@ -57,9 +57,10 @@ const onSubmit = handleSubmit(async (values) => {
         <UiFormMessage />
       </UiFormItem>
     </UiFormField>
-    <div class="flex justify-between items-center">
-      <UiButton class="w-1/2">Sign Up</UiButton>
-      <p class="text-gray-500 text-sm">Have an account? <span @click="$router.push(LOGIN_ROUTE)" class="text-gray-950 cursor-pointer border-solid border-b border-gray-950">Sign In Now</span></p>
+    <div class="flex justify-between items-center flex-col space-y-2 mb-6">
+      <UiButton @click="onSubmit" class="w-full">Sign Up With Email</UiButton>
+      <p class="text-gray-500 text-sm">Have an account? <span @click="router.push(LOGIN_ROUTE)" class="text-gray-950 cursor-pointer border-solid border-b border-gray-950">Sign In Now</span></p>
     </div>
+    <AuthGitHub />
   </form>
 </template>
