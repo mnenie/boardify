@@ -9,7 +9,7 @@ if(route.path === LOGIN_ROUTE){
 
 <template>
   <div class="h-screen w-1/2 flex justify-center items-center">
-    <UiCard class="flex-col w-3/4 items-center">
+    <UiCard class="flex-col w-2/3 items-center">
       <UiCardHeader class="flex items-center">
         <UiCardTitle class="mb-px">{{ isLogin ? 'Welcome back' : 'Get started' }}</UiCardTitle>
         <UiCardDescription>{{ isLogin ? 'Enter your info below to sign in your account' : 'Enter your info below to create your account' }}</UiCardDescription>
