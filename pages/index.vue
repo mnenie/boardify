@@ -13,8 +13,6 @@ provide('changeColor', { changeEraser, changePen, changeHighlighterBlack, change
 
 const { saveImage, resetImage, isDragg, isGrid, isSave, onDragg, onDraw, onGrid, deleteGrid } = useUiSettingsDraw()
 
-const { isExperimental, onExperimental } = useExperimentalFeatures()
-
 provide('saveImage', { saveImage })
 </script>
 
@@ -23,13 +21,12 @@ provide('saveImage', { saveImage })
     <WhiteboardCanvas :color="color" :line="line" :radius="radius" :is-draggable="isDragg" :is-grid="isGrid"
       :on-save="isSave" @image-state-reset="resetImage" />
     <WhiteboardName />
-    <WhiteboardDrawSettings @on-save="saveImage" @on-dragg="onExperimental" @on-draw="onDraw" @on-grid="onGrid"
+    <WhiteboardDrawSettings @on-save="saveImage" @on-draw="onDraw" @on-grid="onGrid"
       @delete-grid="deleteGrid" />
     <WhiteboardUsers />
     <WhiteboardScale />
     <WhiteboardMode />
     <WhiteboardDrawItems />
-    <AlertsExperimentalFeature :is-experimental="isExperimental" />
   </div>
 </template>
 
