@@ -59,12 +59,19 @@ export const useAuthStore = defineStore("auth", () => {
     }
   }
 
+
+  const gitHubSession = async () => {
+    await account.createOAuth2Session('github')
+    console.log(account.getSession('current'))
+  }
+
   return {
     user,
     registration,
     logout,
     login,
     isLogin,
-    getAccount
+    getAccount, 
+    gitHubSession
   };
 });
