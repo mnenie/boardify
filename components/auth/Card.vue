@@ -8,7 +8,7 @@ if(route.path === LOGIN_ROUTE){
 </script>
 
 <template>
-  <div class="h-screen w-1/2 flex justify-center items-center">
+  <div class="h-screen w-1/2 flex justify-center items-center dark:bg-gray-950">
     <UiCard class="flex-col w-2/3 items-center">
       <UiCardHeader class="flex items-center">
         <UiCardTitle class="mb-px">{{ isLogin ? 'Welcome back' : 'Get started' }}</UiCardTitle>

@@ -1,4 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: [
@@ -18,5 +17,9 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     appwriteKey: process.env.NUXT_APPWRITE_KEY,
-  },
+    firebaseApi: process.env.FIREBASE_API_KEY,
+    public: {
+      firebaseApi: process.env.FIREBASE_API_KEY
+    }
+  }
 });

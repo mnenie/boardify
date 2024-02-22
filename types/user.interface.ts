@@ -1,6 +1,6 @@
 export interface IUser{
   id?: string;
-  name: string;
+  name?: string;
   email: string;
-  status: boolean;
+  photoUrl?: string;
 }

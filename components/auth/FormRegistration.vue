@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import { useForm } from 'vee-validate'
+import type { IUser } from '~/types/user.interface';
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -16,20 +17,24 @@ const { handleSubmit } = useForm({
   validationSchema: formSchema,
 })
 
+const passwordReg = ref<string>('')
 const nameReg = ref<string>('')
 const emailReg = ref<string>('')
-const passwordReg = ref<string>('')
 
 const onSubmit = handleSubmit(async (values) => {
-  await authStore.registration(uuid(), emailReg.value, passwordReg.value, nameReg.value)
+  const userData = ref<IUser>({
+    email: emailReg.value,
+    name: nameReg.value,
+  })
+  await authStore.registration(userData.value, passwordReg.value)
   emailReg.value = ''
-  nameReg.value = ''
   passwordReg.value = ''
+  nameReg.value = ''
 })
 </script>
 
 <template>
-  <form class="w-full" @submit.prevent>
+  <div class="w-full">
     <UiFormField v-slot="{ componentField }" name="name">
       <UiFormItem class="mb-4" v-auto-animate>
         <UiFormLabel>Name</UiFormLabel>
@@ -62,5 +67,5 @@ const onSubmit = handleSubmit(async (values) => {
       <p class="text-gray-500 text-sm">Have an account? <span @click="router.push(LOGIN_ROUTE)" class="text-gray-950 cursor-pointer border-solid border-b border-gray-950">Sign In Now</span></p>
     </div>
     <AuthAdditional />
-  </form>
+  </div>
 </template>

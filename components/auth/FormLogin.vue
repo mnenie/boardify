@@ -19,14 +19,14 @@ const authStore = useAuthStore()
 
 const onSubmit = handleSubmit(async (values) => {
   await authStore.login(email.value, password.value)
-
   email.value = ''
   password.value = ''
 })
+
 </script>
 
 <template>
-  <form class="w-full" @submit.prevent>
+  <div class="w-full" @submit.prevent>
     <UiFormField v-slot="{ componentField }" name="email">
       <UiFormItem class="mb-4" v-auto-animate>
         <UiFormLabel>Email</UiFormLabel>
@@ -50,5 +50,5 @@ const onSubmit = handleSubmit(async (values) => {
       <p class="text-gray-500 text-sm">Don't have an account? <span @click="router.push(REGISTRATION_ROUTE)" class="text-gray-950 cursor-pointer border-solid border-b border-gray-950">Sign Up Now</span></p>
     </div>
     <AuthAdditional />
-  </form>
+  </div>
 </template>

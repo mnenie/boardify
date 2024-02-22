@@ -1,77 +1,78 @@
-import { account } from "~/lib/appwrite";
+import useFirebase from "~/composables/useFirebase";
 import type { IUser } from "~/types/user.interface";
 
 export const useAuthStore = defineStore("auth", () => {
   const user = ref({} as IUser);
-  const isLogin = ref<boolean>(false)
   const router = useRouter();
+  const token = ref("");
+
+  const {
+    onFirebaseRegistration,
+    onFirebaseLogout,
+    onFirebaseLogin,
+    onGitHubLogin,
+  } = useFirebase();
 
   const login = async (email: string, password: string) => {
     try {
-      await account.createEmailSession(email, password);
-      const response = await account.get();
-      if (response) {
-        user.value = {
-          email: response.email,
-          name: response.name,
-          status: response.status,
-        };
-        isLogin.value = true
-        await router.push(HOME_ROUTE)
-      }
+      const response = await onFirebaseLogin(email, password);
+      //@ts-ignore
+      token.value = response?.user.accessToken;
+      sessionStorage.setItem("token", token.value);
+      await router.push(HOME_ROUTE);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const registration = async (userData: IUser, password: string) => {
+    try {
+      const response = await onFirebaseRegistration(userData, password);
+      user.value = { ...userData, id: response?.user.uid! };
+      //@ts-ignore
+      token.value = response?.user.accessToken;
+      sessionStorage.setItem("token", token.value);
+      await router.push(HOME_ROUTE);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const registration = async (
-    userId: any,
-    email: string,
-    password: string,
-    name: string
-  ) => {
-    await account.create(userId, email, password, name);
-    login(email, password);
-  };
-
   const logout = async () => {
-    await account.deleteSession("current");
-    user.value = {} as IUser;
-    isLogin.value = false
-    await router.push(LOGIN_ROUTE)
-  };
-
-  const getAccount = async () => {
     try {
-      const currentUser = await account.get()
-      if (currentUser) {
-        user.value = {
-          id: currentUser.$id,
-          name: currentUser.name,
-          email: currentUser.email,
-          status: currentUser.status,
-        } as IUser;
-        isLogin.value = true;
-      }
+      await onFirebaseLogout();
+      user.value = {} as IUser;
+      token.value = "";
+      sessionStorage.removeItem("token");
+      await router.push(LOGIN_ROUTE);
     } catch (e) {
       console.log(e);
-      await router.push(LOGIN_ROUTE)
     }
-  }
-
+  };
 
   const gitHubSession = async () => {
-    await account.createOAuth2Session('github')
-    console.log(account.getSession('current'))
-  }
+    try {
+      const response = await onGitHubLogin();
+      user.value = {
+        id: response?.user.uid!,
+        email: response?.user.email!,
+        name: response?.user.displayName!,
+        photoUrl: response?.user.photoURL!,
+      };
+      //@ts-ignore
+      token.value = response?.user.accessToken;
+      console.log('user', user.value);
+      await router.push(HOME_ROUTE);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return {
     user,
     registration,
     logout,
     login,
-    isLogin,
-    getAccount, 
-    gitHubSession
+    gitHubSession,
   };
 });
