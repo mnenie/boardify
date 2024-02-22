@@ -5,7 +5,7 @@ const injectedMethods: ChangeColorMethods | undefined = inject('changeColor');
 const { changeEraser, changePen, changeHighlighterBlack, changePencilBlack, changePencilRed, changePencilGreen, changePencilBlue, changePencilPurple, changeHighlighterRed } = injectedMethods || {};
 
 const draws = ref<IDrawUi[]>([
-  { id: 0, src: '/img/eraser.jpg', active: false, event: changeEraser },
+  { id: 0, src: './img/eraser.jpg', active: false, event: changeEraser },
   { id: 1, src: '/img/pen.jpg', active: true, event: changePen },
   { id: 2, src: '/img/black.jpg', active: false, event: changePencilBlack },
   { id: 3, src: '/img/red.jpg', active: false, event: changePencilRed },

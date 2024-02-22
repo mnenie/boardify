@@ -53,6 +53,12 @@ export default function useFirebase() {
   const onGitHubLogin = async () => {
     try {
       const creds = await signInWithPopup($auth as Auth, provider);
+      await addDoc(collection($db as Firestore, "users"), {
+        uid: creds.user.uid,
+        name: creds.user.displayName,
+        email: creds.user.email,
+        photo: creds.user.photoURL
+      });
       return creds;
     } catch (e) {
       console.log(e);

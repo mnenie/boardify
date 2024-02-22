@@ -2,7 +2,6 @@
 useSeoMeta({
   title: 'Login | Boardify'
 })
-
 </script>
 
 <template>
