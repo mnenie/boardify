@@ -29,7 +29,7 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-  <form class="w-full">
+  <form class="w-full" @submit.prevent>
     <UiFormField v-slot="{ componentField }" name="name">
       <UiFormItem class="mb-4" v-auto-animate>
         <UiFormLabel>Name</UiFormLabel>
@@ -61,6 +61,6 @@ const onSubmit = handleSubmit(async (values) => {
       <UiButton @click="onSubmit" class="w-full">Sign Up With Email</UiButton>
       <p class="text-gray-500 text-sm">Have an account? <span @click="router.push(LOGIN_ROUTE)" class="text-gray-950 cursor-pointer border-solid border-b border-gray-950">Sign In Now</span></p>
     </div>
-    <AuthGitHub />
+    <AuthAdditional />
   </form>
 </template>
