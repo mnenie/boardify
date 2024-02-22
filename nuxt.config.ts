@@ -16,7 +16,6 @@ export default defineNuxtConfig({
     storesDirs: ["./store/**"],
   },
   runtimeConfig: {
-    appwriteKey: process.env.NUXT_APPWRITE_KEY,
     firebaseApi: process.env.FIREBASE_API_KEY,
     public: {
       firebaseApi: process.env.FIREBASE_API_KEY
