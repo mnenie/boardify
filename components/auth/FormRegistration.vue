@@ -29,7 +29,7 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-  <form class="w-full">
+  <form class="w-full" @submit.prevent>
     <UiFormField v-slot="{ componentField }" name="name">
       <UiFormItem class="mb-4" v-auto-animate>
         <UiFormLabel>Name</UiFormLabel>
