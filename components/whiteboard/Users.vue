@@ -5,6 +5,12 @@ const authStore = useAuthStore()
 const logout = async () => {
   await authStore.logout()
 }
+
+const {getCurrentUser} = useFirebase()
+
+onMounted(() => {
+  authStore.user = {id: getCurrentUser()?.uid, name: getCurrentUser()?.displayName!, email: getCurrentUser()?.email!}
+})
 </script>
 
 <template>

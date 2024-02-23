@@ -4,7 +4,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   GithubAuthProvider,
-  GoogleAuthProvider,
+  onAuthStateChanged,
 } from "firebase/auth";
 import type { Auth } from "firebase/auth";
 import type { Firestore } from "firebase/firestore";
@@ -12,6 +12,8 @@ import { addDoc, collection } from "firebase/firestore";
 import type { IUser } from "~/types/user.interface";
 export default function useFirebase() {
   const { $auth, $db } = useNuxtApp();
+  const { data } = useUsersQuery();
+
   const onFirebaseRegistration = async (user: IUser, password: string) => {
     try {
       const creds = await createUserWithEmailAndPassword(
@@ -19,10 +21,15 @@ export default function useFirebase() {
         user.email,
         password
       );
-      await addDoc(collection($db as Firestore, "users"), {
-        uid: creds.user.uid,
-        ...user,
-      });
+      const userExists = data.value?.some(
+        (user) => user.uid === creds.user.uid
+      );
+      if (!userExists) {
+        await addDoc(collection($db as Firestore, "users"), {
+          uid: creds.user.uid,
+          ...user,
+        });
+      }
       return creds;
     } catch (e) {
       console.log(e);
@@ -53,22 +60,33 @@ export default function useFirebase() {
   const onGitHubLogin = async () => {
     try {
       const creds = await signInWithPopup($auth as Auth, provider);
-      await addDoc(collection($db as Firestore, "users"), {
-        uid: creds.user.uid,
-        name: creds.user.displayName,
-        email: creds.user.email,
-        photo: creds.user.photoURL
-      });
+      const userExists = data.value?.some(
+        (user) => user.uid === creds.user.uid
+      );
+      if (!userExists) {
+        await addDoc(collection($db as Firestore, "users"), {
+          uid: creds.user.uid,
+          name: creds.user.displayName,
+          email: creds.user.email,
+          photo: creds.user.photoURL,
+        });
+      }
       return creds;
     } catch (e) {
       console.log(e);
     }
   };
 
+  const getCurrentUser = () => {
+    const user = ($auth as Auth).currentUser;
+    return user;
+  };
+
   return {
     onFirebaseRegistration,
     onFirebaseLogout,
     onFirebaseLogin,
-    onGitHubLogin
+    onGitHubLogin,
+    getCurrentUser,
   };
 }

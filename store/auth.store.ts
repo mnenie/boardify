@@ -11,6 +11,7 @@ export const useAuthStore = defineStore("auth", () => {
     onFirebaseLogout,
     onFirebaseLogin,
     onGitHubLogin,
+    getCurrentUser
   } = useFirebase();
 
   const login = async (email: string, password: string) => {
@@ -60,9 +61,7 @@ export const useAuthStore = defineStore("auth", () => {
       };
       //@ts-ignore
       token.value = response?.user.accessToken;
-      console.log('user', user.value);
       await router.push(HOME_ROUTE);
-      console.log(response);
     } catch (err) {
       console.log(err);
     }
