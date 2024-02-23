@@ -21,6 +21,8 @@ export const useAuthStore = defineStore("auth", () => {
       //@ts-ignore
       token.value = response?.user.accessToken;
       sessionStorage.setItem("token", token.value);
+      const uid = useCookie('uid');
+      uid.value = response?.user?.uid
       if(token.value){
         await router.push(HOME_ROUTE);
       }
@@ -35,6 +37,8 @@ export const useAuthStore = defineStore("auth", () => {
       //@ts-ignore
       token.value = response?.user.accessToken;
       sessionStorage.setItem("token", token.value);
+      const uid = useCookie('uid');
+      uid.value = response?.user?.uid
       if(token.value){
         await router.push(HOME_ROUTE);
       }
@@ -49,6 +53,8 @@ export const useAuthStore = defineStore("auth", () => {
       user.value = {} as IUser;
       token.value = "";
       sessionStorage.removeItem("token");
+      const uid = useCookie('uid');
+      uid.value = null
       await router.push(LOGIN_ROUTE);
     } catch (e) {
       console.log(e);
@@ -67,6 +73,8 @@ export const useAuthStore = defineStore("auth", () => {
       //@ts-ignore
       token.value = response?.user.accessToken;
       sessionStorage.setItem("token", token.value);
+      const uid = useCookie('uid');
+      uid.value = response?.user?.uid
       if(token.value){
         await router.push(HOME_ROUTE);
       }

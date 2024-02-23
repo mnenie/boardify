@@ -6,10 +6,6 @@ const logout = async () => {
   await authStore.logout()
 }
 
-onMounted(async () => {
-  await authStore.getCurrentSessionUser()
-})
-
 const userName = computed(() => {
   if(authStore.user && authStore.user.name && !authStore.user.photoUrl){
     return authStore.user.name[0]

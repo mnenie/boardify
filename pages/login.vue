@@ -2,6 +2,10 @@
 useSeoMeta({
   title: 'Login | Boardify'
 })
+
+definePageMeta({
+  middleware: 'sign-in'
+})
 </script>
 
 <template>

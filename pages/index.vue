@@ -2,6 +2,9 @@
 useSeoMeta({
   title: 'Boardify - virtual whiteboard for collaborative solutions'
 })
+definePageMeta({
+  middleware: 'auth'
+})
 
 const color = ref<string>("#000");
 const line = ref<number>(3.3);
@@ -14,6 +17,13 @@ provide('changeColor', { changeEraser, changePen, changeHighlighterBlack, change
 const { saveImage, resetImage, isDragg, isGrid, isSave, onDragg, onDraw, onGrid, deleteGrid } = useUiSettingsDraw()
 
 provide('saveImage', { saveImage })
+
+const authStore = useAuthStore()
+
+onMounted(async () => {
+  await authStore.getCurrentSessionUser()
+})
+
 </script>
 
 <template>
