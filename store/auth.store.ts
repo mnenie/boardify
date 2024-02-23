@@ -1,3 +1,4 @@
+import type { User } from "firebase/auth";
 import useFirebase from "~/composables/useFirebase";
 import type { IUser } from "~/types/user.interface";
 
@@ -20,7 +21,9 @@ export const useAuthStore = defineStore("auth", () => {
       //@ts-ignore
       token.value = response?.user.accessToken;
       sessionStorage.setItem("token", token.value);
-      await router.push(HOME_ROUTE);
+      if(token.value){
+        await router.push(HOME_ROUTE);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -32,7 +35,9 @@ export const useAuthStore = defineStore("auth", () => {
       //@ts-ignore
       token.value = response?.user.accessToken;
       sessionStorage.setItem("token", token.value);
-      await router.push(HOME_ROUTE);
+      if(token.value){
+        await router.push(HOME_ROUTE);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -61,11 +66,24 @@ export const useAuthStore = defineStore("auth", () => {
       };
       //@ts-ignore
       token.value = response?.user.accessToken;
-      await router.push(HOME_ROUTE);
+      sessionStorage.setItem("token", token.value);
+      if(token.value){
+        await router.push(HOME_ROUTE);
+      }
     } catch (err) {
       console.log(err);
     }
   };
+
+  const getCurrentSessionUser = async () => {
+    try{
+      const response = await getCurrentUser() as User
+      user.value = {id: response.uid, email: response.email!, name: response.displayName!, photoUrl: response.photoURL!}
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
 
   return {
     user,
@@ -73,5 +91,6 @@ export const useAuthStore = defineStore("auth", () => {
     logout,
     login,
     gitHubSession,
+    getCurrentSessionUser
   };
 });

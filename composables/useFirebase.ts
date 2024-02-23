@@ -78,8 +78,15 @@ export default function useFirebase() {
   };
 
   const getCurrentUser = () => {
-    const user = ($auth as Auth).currentUser;
-    return user;
+    return new Promise((resolve, reject) => {
+      onAuthStateChanged($auth as Auth, (user) => {
+        if (user) {
+          resolve(user);
+        } else {
+          reject(null);
+        }
+      });
+    });
   };
 
   return {
