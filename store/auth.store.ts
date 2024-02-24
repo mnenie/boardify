@@ -27,10 +27,10 @@ export const useAuthStore = defineStore("auth", () => {
       console.log(err);
     }
   };
-  const registration = async (userData: IUser, password: string) => {
+  const registration = async (email: string, password: string) => {
     try {
-      const response = await onFirebaseRegistration(userData, password);
-      user.value = { ...userData, id: response?.user.uid! };
+      const response = await onFirebaseRegistration(email, password);
+      user.value = { email, id: response?.user.uid! };
       //@ts-ignore
       token.value = response?.user.accessToken;
       if(token.value){

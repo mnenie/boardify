@@ -3,13 +3,11 @@ import { v4 as uuid } from 'uuid'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import { useForm } from 'vee-validate'
-import type { IUser } from '~/types/user.interface';
 
 const authStore = useAuthStore()
 const router = useRouter()
 
 const formSchema = toTypedSchema(z.object({
-  name: z.string({ required_error: 'Name is a required field' }).nonempty('Name is a required field').min(2).max(40),
   email: z.string({ required_error: 'Email is a required field' }).nonempty('Email is a required field').email('Email must be a valid'),
   password: z.string({ required_error: 'Password is a required field' }).nonempty('Password is a required field').min(8, 'Password must be at least 8 characters')
 }))
@@ -18,32 +16,17 @@ const { handleSubmit } = useForm({
 })
 
 const passwordReg = ref<string>('')
-const nameReg = ref<string>('')
 const emailReg = ref<string>('')
 
 const onSubmit = handleSubmit(async (values) => {
-  const userData = ref<IUser>({
-    email: emailReg.value,
-    name: nameReg.value,
-  })
-  await authStore.registration(userData.value, passwordReg.value)
+  await authStore.registration(emailReg.value, passwordReg.value)
   emailReg.value = ''
   passwordReg.value = ''
-  nameReg.value = ''
 })
 </script>
 
 <template>
   <div class="w-full">
-    <UiFormField v-slot="{ componentField }" name="name">
-      <UiFormItem class="mb-4" v-auto-animate>
-        <UiFormLabel>Name</UiFormLabel>
-        <UiFormControl>
-          <UiInput type="text" placeholder="Enter your name" v-bind="componentField" v-model="nameReg" />
-        </UiFormControl>
-        <UiFormMessage />
-      </UiFormItem>
-    </UiFormField>
     <UiFormField v-slot="{ componentField }" name="email">
       <UiFormItem class="mb-4" v-auto-animate>
         <UiFormLabel>Email</UiFormLabel>

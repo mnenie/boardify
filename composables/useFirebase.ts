@@ -9,16 +9,16 @@ import {
 import type { Auth } from "firebase/auth";
 import type { Firestore } from "firebase/firestore";
 import { addDoc, collection } from "firebase/firestore";
-import type { IUser } from "~/types/user.interface";
+
 export default function useFirebase() {
   const { $auth, $db } = useNuxtApp();
   const { data } = useUsersQuery();
 
-  const onFirebaseRegistration = async (user: IUser, password: string) => {
+  const onFirebaseRegistration = async (email: string, password: string) => {
     try {
       const creds = await createUserWithEmailAndPassword(
         $auth as Auth,
-        user.email,
+        email,
         password
       );
       const userExists = data.value?.some(
@@ -27,7 +27,7 @@ export default function useFirebase() {
       if (!userExists) {
         await addDoc(collection($db as Firestore, "users"), {
           uid: creds.user.uid,
-          ...user,
+          email: creds.user.email,
         });
       }
       return creds;
@@ -68,7 +68,7 @@ export default function useFirebase() {
           uid: creds.user.uid,
           name: creds.user.displayName,
           email: creds.user.email,
-          photo: creds.user.photoURL,
+          photoURL: creds.user.photoURL,
         });
       }
       return creds;
