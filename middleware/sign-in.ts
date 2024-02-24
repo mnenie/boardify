@@ -1,5 +1,5 @@
 export default defineNuxtRouteMiddleware(async (to) => {
-  if (useCookie("uid").value) {
+  if (useCookie("token").value) {
     return navigateTo(HOME_ROUTE);
   }
 });

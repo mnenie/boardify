@@ -1,5 +1,5 @@
 export default defineNuxtRouteMiddleware((to) => {
-  if (!useCookie("uid").value) {
+  if (!useCookie("token").value) {
     abortNavigation();
     return navigateTo(LOGIN_ROUTE);
   }

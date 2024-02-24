@@ -5,7 +5,7 @@ import type { IUser } from "~/types/user.interface";
 export const useAuthStore = defineStore("auth", () => {
   const user = ref({} as IUser);
   const router = useRouter();
-  const token = ref("");
+  const token = useCookie('token');
 
   const {
     onFirebaseRegistration,
@@ -20,9 +20,6 @@ export const useAuthStore = defineStore("auth", () => {
       const response = await onFirebaseLogin(email, password);
       //@ts-ignore
       token.value = response?.user.accessToken;
-      sessionStorage.setItem("token", token.value);
-      const uid = useCookie('uid');
-      uid.value = response?.user?.uid
       if(token.value){
         await router.push(HOME_ROUTE);
       }
@@ -36,9 +33,6 @@ export const useAuthStore = defineStore("auth", () => {
       user.value = { ...userData, id: response?.user.uid! };
       //@ts-ignore
       token.value = response?.user.accessToken;
-      sessionStorage.setItem("token", token.value);
-      const uid = useCookie('uid');
-      uid.value = response?.user?.uid
       if(token.value){
         await router.push(HOME_ROUTE);
       }
@@ -72,9 +66,6 @@ export const useAuthStore = defineStore("auth", () => {
       };
       //@ts-ignore
       token.value = response?.user.accessToken;
-      sessionStorage.setItem("token", token.value);
-      const uid = useCookie('uid');
-      uid.value = response?.user?.uid
       if(token.value){
         await router.push(HOME_ROUTE);
       }
