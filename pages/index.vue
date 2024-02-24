@@ -37,6 +37,7 @@ onMounted(async () => {
     <WhiteboardScale />
     <WhiteboardMode />
     <WhiteboardDrawItems />
+    <WhiteboardUndoRedo />
   </div>
 </template>
 

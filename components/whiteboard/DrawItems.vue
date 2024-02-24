@@ -27,13 +27,13 @@ const changeActiveElement = (id: number) => {
 
 <template>
   <div
-    class="flex gap-8 items-center p-3 fixed bg-white rounded-md shadow-xl bottom-2 right-1/2 translate-x-1/2 h-14 overflow-hidden">
-    <NuxtImg v-for="item in draws" @click="changeActiveElement(item.id)" class="mt-14 w-7 h-24 transition duration-300 ease-in cursor-pointer" :src="item.src" :class="{'active' : item.active}" />
+    class="flex gap-8 items-center p-2 fixed bg-white rounded-md shadow-xl bottom-2 right-1/2 translate-x-1/2 h-12 overflow-hidden">
+    <NuxtImg v-for="item in draws" @click="changeActiveElement(item.id)" class="mt-12 w-6 h-20 transition duration-300 ease-in cursor-pointer" :src="item.src" :class="{'active' : item.active}" />
   </div>
 </template>
 
 <style scoped>
 .active{
-  margin-top: 34px;
+  margin-top: 36px;
 }
 </style>

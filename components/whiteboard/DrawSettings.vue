@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Save, MousePointer2, Square, Grid3X3, FileUp, Move } from 'lucide-vue-next';
+import { Save, MousePointer2, Square, Grid3X3, FileUp, Move, Hand } from 'lucide-vue-next';
 import type { IDrawSettings } from '~/types/ui.interfase';
 const emits = defineEmits<{
   (e: 'onDragg'): void,
@@ -20,7 +20,7 @@ const settingsGrids = ref<IDrawSettings[]>([
 
 //experimental feature onDragg
 const settingsMove = ref<IDrawSettings[]>([
-  // { id: 0, active: false, icon: Move, event:() => emits('onDragg') },
+  { id: 0, active: false, icon: Hand, event:() => emits('onDragg') },
   { id: 1, active: true, icon: MousePointer2, event:() => emits('onDraw') },
 ])
 const settingsFiles = ref<IDrawSettings[]>([
@@ -51,14 +51,14 @@ const changeActiveMoveSettings = (id: number) => {
 
 <template>
   <div
-    class="flex gap-1 items-center flex-col p-3 w-14 fixed bg-white rounded-md shadow-xl top-1/2 left-2 -translate-y-1/2">
-    <div v-for="i in settingsMove" class="p-2 rounded-md" :class="{ 'active': i.active }">
+    class="flex gap-1 items-center flex-col p-2 w-12 fixed bg-white rounded-md shadow-lg top-1/2 left-2 -translate-y-1/2">
+    <div v-for="i in settingsMove" class="p-1.5 rounded-md" :class="{ 'active': i.active }">
       <component :is="i.icon" class="cursor-pointer" @click="changeActiveMoveSettings(i.id)" />
     </div>
-    <div v-for="i in settingsFiles" class="p-2 rounded-md">
+    <div v-for="i in settingsFiles" class="p-1.5 rounded-md">
       <component :is="i.icon" class="cursor-pointer" @click="i.event" />
     </div>
-    <div v-for="i in settingsGrids" class="p-2 rounded-md" :class="{ 'active': i.active }">
+    <div v-for="i in settingsGrids" class="p-1.5 rounded-md" :class="{ 'active': i.active }">
       <component :is="i.icon" class="cursor-pointer" @click="changeActiveGridsSettings(i.id)" />
     </div>
   </div>
