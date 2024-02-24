@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import { useForm } from 'vee-validate'
+import { toast } from 'vue-sonner'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -20,8 +21,12 @@ const emailReg = ref<string>('')
 
 const onSubmit = handleSubmit(async (values) => {
   await authStore.registration(emailReg.value, passwordReg.value)
+  if(authStore.error){
+    toast.error(authStore.error)
+  }
   emailReg.value = ''
   passwordReg.value = ''
+  authStore.error = ''
 })
 </script>
 

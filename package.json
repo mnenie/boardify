@@ -38,6 +38,7 @@
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^9.0.1",
     "vee-validate": "^4.12.4",
+    "vue-sonner": "^1.0.3",
     "zod": "^3.22.4"
   }
 }

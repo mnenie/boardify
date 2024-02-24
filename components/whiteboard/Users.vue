@@ -11,7 +11,7 @@ const {data} = useUsersQuery()
 
 <template>
   <div class="flex gap-2 items-center p-3 fixed bg-white rounded-md shadow-xl top-2 right-2 h-14">
-    <div v-for="user in data" :key="user.uid" class="flex items-center justify-center w-8 h-8 rounded-full mr-2" :class="{'bg-red-300': !user.photoURL!}">
+    <div v-for="user in data" :key="user.uid" class="flex items-center justify-center w-8 h-8 rounded-full" :class="{'bg-red-300': !user.photoURL!}">
       <span v-if="!user.photoURL" class="text-white text-lg font-normal">{{ user.email?.slice(0, 2) }}</span>
       <NuxtImg v-else-if="user.photoURL" class="rounded-full" :src="user.photoURL" />
     </div>

@@ -2,6 +2,7 @@
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import { useForm } from 'vee-validate'
+import { toast } from 'vue-sonner'
 
 const router = useRouter()
 const formSchema = toTypedSchema(z.object({
@@ -19,8 +20,12 @@ const authStore = useAuthStore()
 
 const onSubmit = handleSubmit(async (values) => {
   await authStore.login(email.value, password.value)
+  if(authStore.error){
+    toast.error(authStore.error)
+  }
   email.value = ''
   password.value = ''
+  authStore.error = ''
 })
 
 </script>
