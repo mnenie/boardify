@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useCanvasStore } from '~/store/canvas.store';
+
 useSeoMeta({
   title: 'Boardify - virtual whiteboard for collaborative solutions'
 })
@@ -19,9 +21,11 @@ const { saveImage, resetImage, isDragg, isGrid, isSave, onDragg, onDraw, onGrid,
 provide('saveImage', { saveImage })
 
 const authStore = useAuthStore()
+const canvasStore = useCanvasStore()
 
 onMounted(async () => {
   await authStore.getCurrentSessionUser()
+  canvasStore.setCanvasSkeleton()
 })
 
 </script>

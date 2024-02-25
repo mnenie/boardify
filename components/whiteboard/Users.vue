@@ -7,6 +7,7 @@ import {
   HeartHandshake,
   HelpCircle,
 } from "lucide-vue-next";
+import { useCanvasStore } from "~/store/canvas.store";
 
 const authStore = useAuthStore();
 const logout = async () => {
@@ -15,10 +16,11 @@ const logout = async () => {
 import { redirect } from "@/helpers/helperRedirect";
 
 const { data, isLoading } = useUsersQuery();
+const canvasStore = useCanvasStore();
 </script>
 
 <template>
-  <div
+  <div v-if="canvasStore.canvasSkeleton"
     class="flex gap-2 items-center p-2 fixed bg-white rounded-md shadow-xl top-2 right-2 h-12"
   >
     <div class="flex gap-3 items-center mr-2">
@@ -83,4 +85,5 @@ const { data, isLoading } = useUsersQuery();
       :stroke-width="1.8"
     />
   </div>
+  <UiSkeleton class="h-12 fixed bg-gray-200 rounded-md shadow-xl top-2 right-2 w-[320px]" v-else />
 </template>

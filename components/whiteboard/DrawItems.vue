@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useCanvasStore } from '~/store/canvas.store';
 import type { ChangeColorMethods } from '~/types/methods.type';
 import type { IDrawUi } from '~/types/ui.interfase';
 const injectedMethods: ChangeColorMethods | undefined = inject('changeColor');
@@ -23,13 +24,16 @@ const changeActiveElement = (id: number) => {
     btn.active = i === id
   })
 }
+
+const canvasStore = useCanvasStore()
 </script>
 
 <template>
-  <div
+  <div v-if="canvasStore.canvasSkeleton"
     class="flex gap-8 items-center p-2 fixed bg-white rounded-md shadow-xl bottom-2 right-1/2 translate-x-1/2 h-12 overflow-hidden">
     <NuxtImg v-for="item in draws" @click="changeActiveElement(item.id)" class="mt-12 w-6 h-20 transition duration-300 ease-in cursor-pointer" :src="item.src" :class="{'active' : item.active}" />
   </div>
+  <UiSkeleton class="h-12 fixed bg-gray-200 rounded-md shadow-xl bottom-2 right-1/2 translate-x-1/2 w-[480px]" v-else />
 </template>
 
 <style scoped>

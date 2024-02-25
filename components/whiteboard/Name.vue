@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { Settings, ExternalLink, Trash2 } from "lucide-vue-next";
+import { useCanvasStore } from "~/store/canvas.store";
 const online = useOnline();
 
 const project = ref("default project");
+
+const canvasStore = useCanvasStore()
 </script>
 
 <template>
-  <div
+  <div v-if="canvasStore.canvasSkeleton"
     class="flex gap-2 items-center p-2 h-12 fixed bg-white rounded-md shadow-xl top-2 left-2"
   >
     <p class="text-gray-950 text-2xl font-medium pr-2">Boardify</p>
@@ -25,4 +28,5 @@ const project = ref("default project");
       <ExternalLink class="cursor-pointer" :size="20" :stroke-width="1.8" />
     </div>
   </div>
+  <UiSkeleton class="h-12 fixed bg-gray-200 rounded-md shadow-xl top-2 left-2 w-[390px]" v-else />
 </template>
