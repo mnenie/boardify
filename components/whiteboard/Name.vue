@@ -3,8 +3,6 @@ import { Settings, ExternalLink, Trash2 } from "lucide-vue-next";
 const online = useOnline();
 
 const project = ref("default project");
-
-//trash functional in experimental mode
 </script>
 
 <template>
@@ -23,6 +21,7 @@ const project = ref("default project");
       <WhiteboardChangeSheet v-model:project="project">
         <Settings class="cursor-pointer" :size="20" :stroke-width="1.8" />
       </WhiteboardChangeSheet>
+      <Trash2 class="cursor-pointer" :size="20" :stroke-width="1.8" />
       <ExternalLink class="cursor-pointer" :size="20" :stroke-width="1.8" />
     </div>
   </div>
