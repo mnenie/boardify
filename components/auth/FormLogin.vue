@@ -17,6 +17,7 @@ const email = ref('')
 const password = ref('')
 
 const authStore = useAuthStore()
+const canvasStore = useCanvasStore()
 
 const onSubmit = handleSubmit(async (values) => {
   await authStore.login(email.value, password.value)

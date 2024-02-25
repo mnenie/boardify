@@ -1,5 +1,6 @@
 import type { User } from "firebase/auth";
-import useFirebase from "~/composables/useFirebase";
+import useFirebaseAuth from "~/composables/useFirebaseAuth";
+import type { IBoard } from "~/types/board.interface";
 import { Error } from "~/types/error.enum";
 import type { IUser } from "~/types/user.interface";
 
@@ -8,6 +9,7 @@ export const useAuthStore = defineStore("auth", () => {
   const router = useRouter();
   const token = useCookie("token");
   const error = ref("");
+  const canvasStore = useCanvasStore()
 
   const {
     onFirebaseRegistration,
@@ -15,7 +17,8 @@ export const useAuthStore = defineStore("auth", () => {
     onFirebaseLogin,
     onGitHubLogin,
     getCurrentUser,
-  } = useFirebase();
+  } = useFirebaseAuth();
+
 
   const login = async (email: string, password: string) => {
     try {
@@ -25,6 +28,7 @@ export const useAuthStore = defineStore("auth", () => {
       if (token.value) {
         await router.push(HOME_ROUTE);
       }
+
     } catch (err: any) {
       switch (err.message) {
         case Error.INVALID_CREDS:
@@ -36,7 +40,7 @@ export const useAuthStore = defineStore("auth", () => {
   const registration = async (email: string, password: string) => {
     try {
       const response = await onFirebaseRegistration(email, password);
-      user.value = { email, id: response?.user.uid! };
+      user.value = { email, id: response?.user.uid!, board: canvasStore.board };
       //@ts-ignore
       token.value = response?.user.accessToken;
       if (token.value) {
@@ -73,6 +77,7 @@ export const useAuthStore = defineStore("auth", () => {
         email: response?.user.email!,
         name: response?.user.displayName!,
         photoUrl: response?.user.photoURL!,
+        board: canvasStore.board
       };
       //@ts-ignore
       token.value = response?.user.accessToken;
@@ -92,6 +97,7 @@ export const useAuthStore = defineStore("auth", () => {
         email: response.email!,
         name: response.displayName!,
         photoUrl: response.photoURL!,
+        board: canvasStore.board
       };
     } catch (err) {
       console.log(err);

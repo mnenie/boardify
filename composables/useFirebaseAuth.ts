@@ -13,6 +13,8 @@ import { addDoc, collection } from "firebase/firestore";
 export default function useFirebase() {
   const { $auth, $db } = useNuxtApp();
   const { data } = useUsersQuery();
+  const canvasStore = useCanvasStore()
+  const {addNewBoard} = useFirebaseCanvas()
 
   const onFirebaseRegistration = async (email: string, password: string) => {
     const creds = await createUserWithEmailAndPassword(
@@ -22,9 +24,11 @@ export default function useFirebase() {
     );
     const userExists = data.value?.some((user) => user.uid === creds.user.uid);
     if (!userExists) {
+      await addNewBoard()
       await addDoc(collection($db as Firestore, "users"), {
         uid: creds.user.uid,
         email: creds.user.email,
+        board: canvasStore.board
       });
     }
     return creds;
@@ -47,11 +51,13 @@ export default function useFirebase() {
     const creds = await signInWithPopup($auth as Auth, provider);
     const userExists = data.value?.some((user) => user.uid === creds.user.uid);
     if (!userExists) {
+      await addNewBoard()
       await addDoc(collection($db as Firestore, "users"), {
         uid: creds.user.uid,
         name: creds.user.displayName,
         email: creds.user.email,
         photoURL: creds.user.photoURL,
+        board: canvasStore.board
       });
     }
     return creds;

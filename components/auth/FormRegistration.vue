@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { v4 as uuid } from 'uuid'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import { useForm } from 'vee-validate'
 import { toast } from 'vue-sonner'
 
 const authStore = useAuthStore()
+const canvasStore = useCanvasStore()
 const router = useRouter()
 
 const formSchema = toTypedSchema(z.object({

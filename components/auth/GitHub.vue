@@ -1,7 +1,9 @@
 <script setup lang="ts">
 const authStore = useAuthStore()
-const onGitHubSubmit = () => {
-  authStore.gitHubSession()
+const canvasStore = useCanvasStore()
+
+const onGitHubSubmit = async () => {
+  await authStore.gitHubSession()
 }
 </script>
 

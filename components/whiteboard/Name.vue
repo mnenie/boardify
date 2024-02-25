@@ -2,10 +2,13 @@
 import { Settings, ExternalLink, Trash2 } from "lucide-vue-next";
 import { useCanvasStore } from "~/store/canvas.store";
 const online = useOnline();
+const {isLoading, data} = useUsersQuery()
 
-const project = ref("default project");
-
+const project = computed(() => {
+  return authStore.user.board?.name!
+})
 const canvasStore = useCanvasStore()
+const authStore = useAuthStore()
 </script>
 
 <template>
@@ -15,7 +18,8 @@ const canvasStore = useCanvasStore()
     <p class="text-gray-950 text-2xl font-medium pr-2">Boardify</p>
     <div class="h-5 w-px bg-gray-300 mr-2"></div>
     <div class="flex gap-2 items-center pr-2">
-      <span class="text-gray-950 text-lg font-normal">{{ project }}</span>
+      <span v-if="!isLoading" class="text-gray-950 text-lg font-normal">{{ authStore.user.board?.name! }}</span>
+      <UiSkeleton v-else-if="isLoading" class="w-[100px] h-5"></UiSkeleton>
       <div v-if="online" class="rounded-full bg-green-600 w-2 h-2"></div>
       <div v-else class="rounded-full bg-amber-500 w-2 h-2"></div>
     </div>

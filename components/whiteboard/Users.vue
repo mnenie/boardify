@@ -10,13 +10,13 @@ import {
 import { useCanvasStore } from "~/store/canvas.store";
 
 const authStore = useAuthStore();
+const canvasStore = useCanvasStore()
 const logout = async () => {
   await authStore.logout();
 };
 import { redirect } from "@/helpers/helperRedirect";
 
 const { data, isLoading } = useUsersQuery();
-const canvasStore = useCanvasStore();
 </script>
 
 <template>
@@ -51,27 +51,25 @@ const canvasStore = useCanvasStore();
     <div class="mr-2 flex items-center gap-2">
       <UiSkeleton v-if="isLoading" class="w-7 h-7 rounded-full" />
       <div v-else
-        v-for="user in data"
-        :key="user.uid"
         class="flex items-center justify-center w-7 h-7 rounded-full"
-        :class="{'bg-red-300': !user.photoURL!}"
+        :class="{'bg-red-300': !authStore.user.photoUrl}"
       >
         <UiTooltipProvider>
-          <UiTooltip :delay-duration="0" :key="user.uid">
+          <UiTooltip :delay-duration="0" :key="authStore.user.id">
             <UiTooltipTrigger as-child>
               <span
-                v-if="!user.photoURL"
+                v-if="!authStore.user.photoUrl"
                 class="text-white text-base font-normal"
-                >{{ user.email?.slice(0, 2) }}</span
+                >{{ authStore.user.email?.slice(0, 2) }}</span
               >
               <NuxtImg
-                v-else-if="user.photoURL"
+                v-else-if="authStore.user.photoUrl"
                 class="rounded-full"
-                :src="user.photoURL"
+                :src="authStore.user.photoUrl"
               />
             </UiTooltipTrigger>
             <UiTooltipContent class="mt-12 dark:bg-white dark:text-gray-950">
-              <span>{{ user.email }}</span>
+              <span>{{ authStore.user.email }}</span>
             </UiTooltipContent>
           </UiTooltip>
         </UiTooltipProvider>
