@@ -4,7 +4,7 @@ export const useCanvasStore = defineStore("canvas", () => {
   const setCanvasSkeleton = () => {
     setTimeout(() => {
       canvasSkeleton.value = true;
-    }, 2000);
+    }, 1500);
   };
 
   return {
