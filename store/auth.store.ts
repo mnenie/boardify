@@ -1,6 +1,5 @@
 import type { User } from "firebase/auth";
 import useFirebaseAuth from "~/composables/useFirebaseAuth";
-import type { IBoard } from "~/types/board.interface";
 import { Error } from "~/types/error.enum";
 import type { IUser } from "~/types/user.interface";
 
