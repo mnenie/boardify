@@ -7,6 +7,8 @@ export const useCanvasStore = defineStore("canvas", () => {
   const board = ref({} as IBoard);
   const { user } = useAuthStore();
 
+  const {getDocBoard} = useFirebaseCanvas()
+
   const setCanvasSkeleton = () => {
     setTimeout(() => {
       canvasSkeleton.value = true;
@@ -22,14 +24,19 @@ export const useCanvasStore = defineStore("canvas", () => {
     return board.value;
   };
 
-  const getBoard = () => {
-    board.value = user.board!
+  const getBoard = async () => {
+    try{
+      board.value = (await getDocBoard()).board!
+    } catch(err){
+      console.log(err);
+    }
   }
 
   return {
     canvasSkeleton,
     setCanvasSkeleton,
     setBoard,
-    board
+    board,
+    getBoard
   };
 });
