@@ -39,7 +39,7 @@ export const useAuthStore = defineStore("auth", () => {
   const registration = async (email: string, password: string) => {
     try {
       const response = await onFirebaseRegistration(email, password);
-      user.value = { email, id: response?.user.uid!, board: canvasStore.board };
+      user.value = { email, id: response?.user.uid! };
       //@ts-ignore
       token.value = response?.user.accessToken;
       if (token.value) {
@@ -76,7 +76,6 @@ export const useAuthStore = defineStore("auth", () => {
         email: response?.user.email!,
         name: response?.user.displayName!,
         photoUrl: response?.user.photoURL!,
-        board: canvasStore.board
       };
       //@ts-ignore
       token.value = response?.user.accessToken;
@@ -96,7 +95,6 @@ export const useAuthStore = defineStore("auth", () => {
         email: response.email!,
         name: response.displayName!,
         photoUrl: response.photoURL!,
-        board: canvasStore.board
       };
     } catch (err) {
       console.log(err);

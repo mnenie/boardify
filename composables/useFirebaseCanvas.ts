@@ -1,34 +1,32 @@
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-} from "firebase/firestore";
-import type { Firestore } from "firebase/firestore";
-import type { IUser } from "~/types/user.interface";
+import type { User } from "firebase/auth";
+import type { IBoard } from "~/types/board.interface";
 
 export default function useFirebaseCanvas() {
-  const { $db } = useNuxtApp();
-  const canvasStore = useCanvasStore()
-
-  const addNewBoard = async () => {
-    canvasStore.setBoard()
-  };
-
-  const deleteDocBoard = async (id: string) => {
-    await deleteDoc(doc($db as Firestore, "board", id));
-  };
+  const {getCurrentUser} = useFirebaseAuth()
 
   const getDocBoard = async () => {
-    const docRef = doc($db as Firestore, "users", "user")
-    const docSnap = await getDoc(docRef)
-    return docSnap.data() as IUser
+    const response = await getCurrentUser() as User
+    if(response){
+      return JSON.parse(localStorage.getItem("board")!)
+    }
+    return null;
+  };
+
+  const addNewCanvas = async (board: IBoard) => {
+    const response = await getCurrentUser() as User
+    if(response){
+      localStorage.setItem("board", JSON.stringify(board))
+    }
+    return null
+  }
+
+  const deleteCanvas = () => {
+    localStorage.removeItem("board")
   }
 
   return {
-    addNewBoard,
-    deleteDocBoard,
-    getDocBoard
+    getDocBoard,
+    addNewCanvas,
+    deleteCanvas
   };
 }

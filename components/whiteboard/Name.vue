@@ -4,11 +4,10 @@ import { useCanvasStore } from "~/store/canvas.store";
 const online = useOnline();
 const {isLoading, data} = useUsersQuery()
 
-const project = computed(() => {
-  return canvasStore.board.name!
+const project = computed(() =>{
+  return 'ffsdfds'
 })
 const canvasStore = useCanvasStore()
-const authStore = useAuthStore()
 
 onMounted(async () => {
   await canvasStore.getBoard()

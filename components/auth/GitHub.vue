@@ -4,6 +4,7 @@ const canvasStore = useCanvasStore()
 
 const onGitHubSubmit = async () => {
   await authStore.gitHubSession()
+  await canvasStore.setBoard()
 }
 </script>
 
