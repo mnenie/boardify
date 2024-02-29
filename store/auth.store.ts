@@ -8,7 +8,7 @@ export const useAuthStore = defineStore("auth", () => {
   const router = useRouter();
   const token = useCookie("token");
   const error = ref("");
-  const canvasStore = useCanvasStore()
+  const canvasStore = useCanvasStore();
 
   const {
     onFirebaseRegistration,
@@ -18,7 +18,6 @@ export const useAuthStore = defineStore("auth", () => {
     getCurrentUser,
   } = useFirebaseAuth();
 
-
   const login = async (email: string, password: string) => {
     try {
       const response = await onFirebaseLogin(email, password);
@@ -27,7 +26,6 @@ export const useAuthStore = defineStore("auth", () => {
       if (token.value) {
         await router.push(HOME_ROUTE);
       }
-
     } catch (err: any) {
       switch (err.message) {
         case Error.INVALID_CREDS:

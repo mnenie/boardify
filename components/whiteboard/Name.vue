@@ -16,12 +16,12 @@ onMounted(async () => {
 
 <template>
   <div v-if="canvasStore.canvasSkeleton"
-    class="flex gap-2 items-center p-2 h-12 fixed bg-white rounded-md shadow-xl top-2 left-2"
+    class="flex gap-2 items-center p-2 h-12 absolute bg-white rounded-md shadow-xl top-2 left-2"
   >
-    <p class="text-gray-950 text-2xl font-medium pr-2">Boardify</p>
+    <p class="text-gray-950 text-2xl font-medium pr-2 select-none">Boardify</p>
     <div class="h-5 w-px bg-gray-300 mr-2"></div>
     <div class="flex gap-2 items-center pr-2">
-      <span v-if="!isLoading" class="text-gray-950 text-lg font-normal">{{ canvasStore.board.name }}</span>
+      <span v-if="!isLoading" class="text-gray-950 text-lg font-normal select-none">{{ canvasStore.board.name }}</span>
       <UiSkeleton v-else-if="isLoading" class="w-[100px] h-5"></UiSkeleton>
       <div v-if="online" class="rounded-full bg-green-600 w-2 h-2"></div>
       <div v-else class="rounded-full bg-amber-500 w-2 h-2"></div>

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-const authStore = useAuthStore()
-const canvasStore = useCanvasStore()
+const authStore = useAuthStore();
+const canvasStore = useCanvasStore();
 
 const onGitHubSubmit = async () => {
-  await authStore.gitHubSession()
-  await canvasStore.setBoard()
-}
+  await authStore.gitHubSession();
+  await canvasStore.setBoard();
+};
 </script>
 
 <template>

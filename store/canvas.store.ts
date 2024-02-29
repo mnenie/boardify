@@ -6,6 +6,7 @@ import type { IUser } from "~/types/user.interface";
 export const useCanvasStore = defineStore("canvas", () => {
   const canvasSkeleton = ref(false);
   const board = ref<IBoard>({} as IBoard);
+  const canvasRef = ref<HTMLCanvasElement>();
 
   const { getDocBoard, addNewCanvas, deleteCanvas } = useFirebaseCanvas();
   const authStore = useAuthStore();
@@ -44,7 +45,7 @@ export const useCanvasStore = defineStore("canvas", () => {
   const updateCanvas = async (user: IUser) => {
     try {
       const userExists = board.value.users.some(
-        (existsUser) => existsUser.id === user.id
+        (existsUser) => existsUser.id === user.id,
       );
       if (!userExists) {
         board.value.users.push({ id: user.id, email: user.email });
@@ -70,5 +71,6 @@ export const useCanvasStore = defineStore("canvas", () => {
     board,
     getBoard,
     setBoard,
+    canvasRef,
   };
 });

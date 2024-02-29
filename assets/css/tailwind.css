@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 body {
-  touch-action: none !important;
   overflow: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+html{
+  overscroll-behavior-x: auto;
 }

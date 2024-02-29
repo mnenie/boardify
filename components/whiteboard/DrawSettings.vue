@@ -1,15 +1,18 @@
 <script setup lang="ts">
-import { Save, MousePointer2, Square, Grid3X3, FileUp, Move, Hand } from 'lucide-vue-next';
+import { Save, MousePointer2, Square, Grid3X3, FileUp, Hand, RectangleHorizontal, ALargeSmall , Pen } from 'lucide-vue-next';
 import { useCanvasStore } from '~/store/canvas.store';
 import type { IDrawSettings } from '~/types/ui.interfase';
 
 const emits = defineEmits<{
-  (e: 'onDragg'): void,
+  (e: 'onDraggable'): void,
+  (e: "onSelect"): void,
   (e: 'onDraw'): void,
   (e: 'onGrid'): void,
   (e: 'deleteGrid'): void,
   (e: 'onSave'): void,
   (e: 'onUpload'): void,
+  (e: 'onRectangle'): void,
+  (e: 'onText'): void,
 }>()
 
 //@ts-ignore
@@ -22,8 +25,11 @@ const settingsGrids = ref<IDrawSettings[]>([
 
 //experimental feature onDragg
 const settingsMove = ref<IDrawSettings[]>([
-  { id: 0, active: false, icon: Hand, event:() => emits('onDragg') },
-  { id: 1, active: true, icon: MousePointer2, event:() => emits('onDraw') },
+  { id: 0, active: false, icon: Hand, event:() => emits('onDraggable') },
+  { id: 1, active: false, icon: MousePointer2, event:() => emits('onSelect') },
+  { id: 2, active: true, icon: Pen , event:() => emits('onDraw') },
+  { id: 3, active: false, icon: RectangleHorizontal, event:() => emits('onRectangle') },
+  { id: 4, active: false, icon: ALargeSmall, event:() => emits('onText') },
 ])
 const settingsFiles = ref<IDrawSettings[]>([
   { id: 0, icon: Save, event: saveImage },

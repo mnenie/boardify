@@ -1,84 +1,117 @@
 <script setup lang="ts">
-import { io } from 'socket.io-client';
-import type { IDraw } from '~/types/draw.interface';
-import type { IDrawLine } from '~/types/draw.interface';
+import rough from 'roughjs';
+import { ElementType } from '~/types/element.type';
+import type { Element } from '~/types/element.type';
+import { Action } from '~/types/action.enum';
 
-type IProps = {
-  line: number,
-  color: string,
-  radius: number,
-  isDraggable: boolean,
-  isGrid: boolean,
-  onSave: boolean
-}
-const props = defineProps<IProps>()
+const props = defineProps<{
+  isTool: ElementType;
+}>();
 
-const emit = defineEmits<{
-  (e: 'imageStateReset'): void
-}>()
-const canvasRef = ref<HTMLCanvasElement | null>(null);
-const { drawLine, drawElements } = useDrawLine();
-const { onMouseMove, onMouseDown, onMouseEnd, drawGrid, hideGrid, saveImage } = useDraw(createLine, canvasRef)
-const { onMouseDownPan, onMouseMovePan, onMouseUpPan } = usePanZoom(canvasRef, drawElements)
+const elements = ref<Element[]>([]);
+const canvas = ref<HTMLCanvasElement | null>(null);
+const action = ref('none');
+const selectedElement = ref<Element | null>(null);
+const panOffset = ref({ x: 0, y: 0 });
+const startPanMousePosition = ref({ x: 0, y: 0 });
+const scale = ref(1);
+const scaleOffset = ref({ x: 0, y: 0 });
+const textArea = ref<HTMLTextAreaElement | null>(null);
 
-const onMove = (e: MouseEvent) => (props.isDraggable ? onMouseMovePan(e) : onMouseMove(e))
-const onDown = (e: MouseEvent) => (props.isDraggable ? onMouseDownPan(e) : onMouseDown())
-const onUp = () => (props.isDraggable ? onMouseUpPan() : onMouseEnd())
+const { handleResize } = useSizeParams(canvas);
+const { drawElement } = useDraw(elements, canvas);
+const { panOrZoomFunction } = useWheelPanZoom(scale, panOffset);
+const { handleBlur } = useTextArea(selectedElement, action, elements, canvas);
+
+const { onMouseDown, onMouseMove, onMouseUp } = useMouseEvents(
+  action,
+  panOffset,
+  props,
+  elements,
+  selectedElement,
+  startPanMousePosition,
+  canvas
+);
+
+const setParamsCanvas = () => {
+  if (canvas.value) {
+    const ctx = canvas.value.getContext('2d');
+    const roughCanvas = rough.canvas(canvas.value);
+    ctx?.clearRect(0, 0, canvas.value.width, canvas.value.height);
+
+    const scaleWidth = canvas.value.width * scale.value;
+    const scaleHeight = canvas.value.height * scale.value;
+
+    const scaleOffsetX = (scaleWidth - canvas.value.width) / 2;
+    const scaleOffsetY = (scaleHeight - canvas.value.height) / 2;
+
+    scaleOffset.value = { x: scaleOffsetX, y: scaleOffsetY };
+
+    ctx?.save();
+    ctx?.translate(
+      panOffset.value.x * scale.value - scaleOffsetX,
+      panOffset.value.y * scale.value - scaleOffsetY
+    );
+    ctx?.scale(scale.value, scale.value);
+    if (elements.value) {
+      elements.value.forEach((element: Element) => {
+        if (action.value === Action.WRITING && selectedElement.value!.id === element.id) return;
+        drawElement(roughCanvas, ctx!, element);
+      });
+    }
+    ctx?.restore();
+  }
+};
+
+watchEffect(() => {
+  setParamsCanvas();
+  if (document) {
+    document.addEventListener('wheel', panOrZoomFunction);
+  }
+  if (action.value === 'writing') {
+    setTimeout(() => {
+      textArea.value!.focus();
+      textArea.value!.value = selectedElement.value!.text!;
+    }, 0);
+  }
+});
 
 onMounted(() => {
-  drawGrid()
-})
-
-watch(() => props.isGrid, (newValue) => {
-  if (canvasRef.value) {
-    if (newValue) {
-      drawGrid();
-    } else {
-      hideGrid();
-    }
-  }
-}, { immediate: true });
-
-watch(() => props.onSave, (newValue) => {
-  if (canvasRef.value) {
-    if (newValue) {
-      saveImage();
-      emit('imageStateReset');
-    }
-  }
-}, { immediate: true });
-
-const socket = io('/draw', {
-  path: '/api/socket.io'
-})
-watchEffect(() => {
-  const ctx = canvasRef.value?.getContext('2d')
-  socket.emit('client-ready')
-  socket.on('get-canvas', () => {
-    if (!canvasRef.value?.toDataURL()) return
-    socket.emit('canvas-state', canvasRef.value.toDataURL())
-  })
-  socket.on('canvas-state-server', (state: string) => {
-    const img = new Image()
-    img.src = state
-    img.onload = () => {
-      ctx?.drawImage(img, 0, 0)
-    }
-  })
-  socket.on('draw-line', ({ prevPoint, currentPoint, color, radius, line }: IDrawLine) => {
-    if (!ctx) return console.log('err');
-    drawLine({ prevPoint, currentPoint, ctx }, toRef(props.color), toRef(props.radius), toRef(props.line));
+  handleResize();
+  document.addEventListener('mouseleave', () => {
+    action.value = 'none';
+    selectedElement.value = null;
   });
-})
+});
 
-function createLine({ prevPoint, currentPoint, ctx }: IDraw) {
-  socket.emit('draw-line', { prevPoint, currentPoint, color: toRef(props, 'color'), radius: toRef(props, 'radius'), line: toRef(props, 'line') })
-  drawLine({ prevPoint, currentPoint, ctx }, toRef(props, 'color'), toRef(props, 'radius'), toRef(props, 'line'))
-}
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
+  document.removeEventListener('mouseleave', () => {
+    action.value = 'none';
+    selectedElement.value = null;
+  });
+});
 </script>
+
 <template>
-  <div class="fixed">
-    <canvas ref="canvasRef" @mousedown="onDown" @mouseup="onUp" @mousemove="onMove"
-      class="fixed w-full h-full dark:bg-neutral-800" />
-  </div>
+  <canvas
+    ref="canvas"
+    class="absolute dark:bg-neutral-800 pointer-events-auto"
+    @mousedown="onMouseDown"
+    @mouseup="onMouseUp"
+    @mousemove="onMouseMove"
+  >
+    Canvas
+  </canvas>
+  <textarea
+    v-if="action === 'writing'"
+    ref="textArea"
+    class="fixed m-0 p-0 border-0 outline-0 overflow-hidden resize-none bg-transparent z-10 w-full"
+    :style="{
+      top: selectedElement?.y1! - 2 + panOffset.y + 'px',
+      left: selectedElement?.x1! + panOffset.x + 'px',
+      font: '24px sans-serif'
+    }"
+    @blur="handleBlur"
+  />
 </template>
