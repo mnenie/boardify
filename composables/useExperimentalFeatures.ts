@@ -9,6 +9,7 @@ export default function useExperimentalFeatures() {
   };
 
   return {
-    onExperimental, isExperimental
-  }
+    onExperimental,
+    isExperimental
+  };
 }
