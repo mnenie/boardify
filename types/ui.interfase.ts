@@ -1,16 +1,15 @@
-export interface IDrawSettings{
+export interface IDrawSettings {
   id: number;
   active?: boolean;
-  event?:() => void;
+  event?: () => void;
   icon?: any;
 }
 
-export interface IDrawUi extends IDrawSettings{
+export interface IDrawUi extends IDrawSettings {
   src: string;
 }
 
 export interface ISettingsUiDraw {
   color: Ref<string>;
-  line: Ref<number>;
-  radius: Ref<number>;
+  lineWidth: Ref<number>;
 }

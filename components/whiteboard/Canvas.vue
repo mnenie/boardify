@@ -6,6 +6,8 @@ import { Action } from '~/types/action.enum';
 
 const props = defineProps<{
   isTool: ElementType;
+  color: string;
+  lineWidth: number;
 }>();
 
 const elements = ref<Element[]>([]);
@@ -96,7 +98,7 @@ onUnmounted(() => {
 <template>
   <canvas
     ref="canvas"
-    class="absolute dark:bg-neutral-800 pointer-events-auto"
+    class="pointer-events-auto absolute dark:bg-neutral-800"
     @mousedown="onMouseDown"
     @mouseup="onMouseUp"
     @mousemove="onMouseMove"
@@ -106,7 +108,7 @@ onUnmounted(() => {
   <textarea
     v-if="action === 'writing'"
     ref="textArea"
-    class="fixed m-0 p-0 border-0 outline-0 overflow-hidden resize-none bg-transparent z-10 w-full"
+    class="fixed z-10 m-0 w-full resize-none overflow-hidden border-0 bg-transparent p-0 outline-0"
     :style="{
       top: selectedElement?.y1! - 2 + panOffset.y + 'px',
       left: selectedElement?.x1! + panOffset.x + 'px',

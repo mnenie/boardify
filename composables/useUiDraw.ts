@@ -1,60 +1,62 @@
-import type { ISettingsUiDraw } from "~/types/ui.interfase";
+import type { ISettingsUiDraw } from '~/types/ui.interfase';
 
-export default function useUiDraw({ color, line, radius }: ISettingsUiDraw) {
-  const {isDark} = useMode()
+export default function useUiDraw({ color, lineWidth }: ISettingsUiDraw) {
+  const { isDark } = useMode();
+
   const changeEraser = () => {
     const colorErase = computed(() => {
-      return isDark.value ? "rgb(38 38 38)" : "rgb(249 250 251)"
+      return isDark.value ? 'rgb(38 38 38)' : 'rgb(249 250 251)';
     });
     color.value = colorErase.value;
-    line.value = 14;
-    radius.value = 7;
+    lineWidth.value = 14;
   };
 
   const changePen = () => {
-    color.value = "#000";
-    line.value = 3.3;
-    radius.value = 0.2;
+    color.value = '#000';
+    lineWidth.value = 5.3;
   };
 
   const changeHighlighterBlack = () => {
-    color.value = "#000";
-    line.value = 15;
-    radius.value = 7;
+    color.value = '#000';
+    lineWidth.value = 15;
   };
   const changeHighlighterRed = () => {
-    color.value = "rgb(220 38 38)";
-    line.value = 15;
-    radius.value = 7;
+    color.value = 'rgb(220 38 38)';
+    lineWidth.value = 15;
   };
 
   const changePencilBlack = () => {
-    color.value = "#000";
-    line.value = 5;
-    radius.value = 2;
+    color.value = '#000';
+    lineWidth.value = 8;
   };
   const changePencilRed = () => {
-    color.value = "rgb(220 38 38)";
-    line.value = 5;
-    radius.value = 2;
+    color.value = 'rgb(220 38 38)';
+    lineWidth.value = 8;
   };
   const changePencilGreen = () => {
-    color.value = "rgb(21 128 61)";
-    line.value = 5;
-    radius.value = 2;
+    color.value = 'rgb(21 128 61)';
+    lineWidth.value = 8;
   };
   const changePencilPurple = () => {
-    color.value = "rgb(124 58 237)";
-    line.value = 5;
-    radius.value = 2;
+    color.value = 'rgb(124 58 237)';
+    lineWidth.value = 8;
   };
   const changePencilBlue = () => {
-    color.value = "rgb(59 130 246)";
-    line.value = 5;
-    radius.value = 2;
+    color.value = 'rgb(59 130 246)';
+    lineWidth.value = 8;
   };
 
   return {
-    color, line, radius, changeEraser, changePencilBlack, changePencilRed, changePencilGreen, changePencilBlue, changePencilPurple, changeHighlighterBlack, changeHighlighterRed, changePen
-  }
+    color,
+    lineWidth,
+    changeEraser,
+    changePencilBlack,
+    changePencilRed,
+    changePencilGreen,
+    changePencilBlue,
+    changePencilPurple,
+    changeHighlighterBlack,
+    changeHighlighterRed,
+    changePen
+  };
 }

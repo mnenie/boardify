@@ -64,7 +64,9 @@ export default function useMouseEvents(
         y1: clientY,
         x2: clientX,
         y2: clientY,
-        type: props.isTool
+        type: props.isTool,
+        color: props.color,
+        lineWidth: props.lineWidth
       });
       elements.value = [...elements.value, element];
       selectedElement!.value = element;
@@ -110,7 +112,9 @@ export default function useMouseEvents(
         y1,
         x2: clientX,
         y2: clientY,
-        type: props.isTool
+        type: props.isTool,
+        color: props.color,
+        lineWidth: props.lineWidth
       });
     } else if (action.value === 'mooving') {
       if (selectedElement.value?.type === ElementType.Pensil) {
@@ -130,7 +134,8 @@ export default function useMouseEvents(
         };
         elements.value = elementsCopy;
       } else {
-        const { id, x1, y1, x2, y2, type, offsetX, offsetY } = selectedElement.value!;
+        const { id, x1, y1, x2, y2, type, offsetX, offsetY, color, lineWidth } =
+          selectedElement.value!;
         const width = x2 - x1;
         const height = y2 - y1;
         const nextX1 = clientX - offsetX!;
@@ -143,18 +148,20 @@ export default function useMouseEvents(
           x2: nextX1 + width,
           y2: nextY1 + height,
           type,
-          options
+          options,
+          color,
+          lineWidth
         });
       }
     } else if (action.value === 'resizing') {
-      const { id, type, position, ...coordinates } = selectedElement.value!;
+      const { id, type, color, lineWidth, position, ...coordinates } = selectedElement.value!;
       const { x1, x2, y1, y2 } = resizeCoordinates(
         clientX,
         clientY,
         position as string,
         coordinates
       )!;
-      updateElement({ id, x1, x2, y1, y2, type });
+      updateElement({ id, x1, x2, y1, y2, type, color, lineWidth });
     }
   };
 
@@ -172,10 +179,10 @@ export default function useMouseEvents(
         return;
       }
       const index = selectedElement.value?.id;
-      const { id, type } = elements.value[index];
+      const { id, type, color, lineWidth } = elements.value[index];
       if ((action.value === 'draw' || action.value === 'resizing') && adjustmentRequired(type)) {
         const { x1, x2, y1, y2 } = adjustElementCoordinates(elements.value[index]);
-        updateElement({ id, x1, x2, y1, y2, type });
+        updateElement({ id, x1, x2, y1, y2, type, color, lineWidth });
       }
     }
     if (action.value === 'writing') return;

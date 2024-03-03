@@ -1,10 +1,11 @@
 export enum ElementType {
-  Rectangle = "rectangle",
-  Text = "text",
-  Pensil = "pensil",
-  Selection = "selection",
-  None = "none",
-  Move = "move",
+  Rectangle = 'rectangle',
+  Text = 'text',
+  Pensil = 'pensil',
+  Selection = 'selection',
+  None = 'none',
+  Move = 'move',
+  Circle = 'circle'
 }
 
 export type Element = {
@@ -23,4 +24,6 @@ export type Element = {
   offsetsX?: number[];
   text?: string;
   options?: any;
+  color: string;
+  lineWidth: number;
 };

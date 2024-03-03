@@ -1,14 +1,13 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: "Boardify - virtual whiteboard for collaborative solutions",
+  title: 'Boardify - virtual whiteboard for collaborative solutions'
 });
 definePageMeta({
-  middleware: "auth",
+  middleware: 'auth'
 });
 
-const color = ref<string>("#000");
-const line = ref<number>(3.3);
-const radius = ref<number>(0.2);
+const color = ref<string>('#000');
+const lineWidth = ref<number>(5.3);
 
 const {
   changeEraser,
@@ -19,10 +18,10 @@ const {
   changePencilRed,
   changePencilGreen,
   changePencilBlue,
-  changePencilPurple,
-} = useUiDraw({ color, line, radius });
+  changePencilPurple
+} = useUiDraw({ color, lineWidth });
 
-provide("changeColor", {
+provide('changeColor', {
   changeEraser,
   changePen,
   changeHighlighterBlack,
@@ -31,7 +30,7 @@ provide("changeColor", {
   changePencilRed,
   changePencilGreen,
   changePencilBlue,
-  changePencilPurple,
+  changePencilPurple
 });
 
 const {
@@ -48,10 +47,10 @@ const {
   isRectangle,
   onRectangle,
   isTool,
-  onText,
+  onText
 } = useUiSettingsDraw();
 
-provide("saveImage", { saveImage });
+provide('saveImage', { saveImage });
 
 const authStore = useAuthStore();
 const canvasStore = useCanvasStore();
@@ -63,8 +62,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="h-screen w-full relative bg-gray-50 select-none">
-    <WhiteboardCanvas :is-tool="isTool" />
+  <div class="relative h-screen w-full select-none bg-gray-50">
+    <WhiteboardCanvas :is-tool="isTool" :color="color" :line-width="lineWidth" />
     <WhiteboardName />
     <WhiteboardDrawSettings
       @on-save="saveImage"

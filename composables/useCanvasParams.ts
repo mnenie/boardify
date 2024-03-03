@@ -6,11 +6,21 @@ import rough from 'roughjs';
 const generator = rough.generator();
 
 export default function useCanvas(elements: Ref<Element[]>, canvas: Ref<HTMLCanvasElement | null>) {
-  const createElement = ({ id, x1, y1, x2, y2, type, points }: Element): Element => {
+  const createElement = ({
+    id,
+    x1,
+    y1,
+    x2,
+    y2,
+    type,
+    points,
+    color,
+    lineWidth
+  }: Element): Element => {
     switch (type) {
       case ElementType.Rectangle:
-        const roughElement = generator.rectangle(x1, y1, x2 - x1, y2 - y1);
-        return { id, x1, y1, x2, y2, type, roughElement };
+        const roughElement = generator.rectangle(x1, y1, x2 - x1, y2 - y1, { fill: color });
+        return { id, x1, y1, x2, y2, type, roughElement, color, lineWidth };
       case ElementType.Pensil:
         return {
           id,
@@ -19,10 +29,12 @@ export default function useCanvas(elements: Ref<Element[]>, canvas: Ref<HTMLCanv
           x1: x1,
           y1: y1,
           x2: x2,
-          y2: y2
+          y2: y2,
+          color: color,
+          lineWidth: lineWidth
         };
       case ElementType.Text:
-        return { id, type, x1, y1, text: '', x2: x2, y2: y2 };
+        return { id, type, x1, y1, text: '', x2: x2, y2: y2, color, lineWidth };
       default:
         throw new Error('err');
     }
@@ -67,7 +79,9 @@ export default function useCanvas(elements: Ref<Element[]>, canvas: Ref<HTMLCanv
             y1: dataElement.y1,
             x2: dataElement.x1 + textWidth,
             y2: dataElement.y1 + textHeight,
-            type: dataElement.type
+            type: dataElement.type,
+            color: dataElement.color,
+            lineWidth: dataElement.lineWidth
           }),
           text: dataElement.options.text
         };
