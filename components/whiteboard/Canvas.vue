@@ -8,9 +8,10 @@ const props = defineProps<{
   isTool: ElementType;
   color: string;
   lineWidth: number;
+  elements: Array<Element>;
 }>();
 
-const elements = ref<Element[]>([]);
+const elements = toRef(props.elements);
 const canvas = ref<HTMLCanvasElement | null>(null);
 const action = ref('none');
 const selectedElement = ref<Element | null>(null);
@@ -34,6 +35,7 @@ const { onMouseDown, onMouseMove, onMouseUp } = useMouseEvents(
   startPanMousePosition,
   canvas
 );
+const { saveToLocalStorage, loadFromLocalStorage } = useLocalCanvas(elements);
 
 const setParamsCanvas = () => {
   if (canvas.value) {
@@ -56,6 +58,7 @@ const setParamsCanvas = () => {
     );
     ctx?.scale(scale.value, scale.value);
     if (elements.value) {
+      saveToLocalStorage();
       elements.value.forEach((element: Element) => {
         if (action.value === Action.WRITING && selectedElement.value!.id === element.id) return;
         drawElement(roughCanvas, ctx!, element);
@@ -77,8 +80,8 @@ watchEffect(() => {
     }, 0);
   }
 });
-
 onMounted(() => {
+  loadFromLocalStorage();
   handleResize();
   document.addEventListener('mouseleave', () => {
     action.value = 'none';

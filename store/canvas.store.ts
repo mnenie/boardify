@@ -1,12 +1,13 @@
-import { v4 as uuid } from "uuid";
-import { useAuthStore } from "@/store/auth.store";
-import type { IBoard } from "~/types/board.interface";
-import type { IUser } from "~/types/user.interface";
+import { v4 as uuid } from 'uuid';
+import { useAuthStore } from '@/store/auth.store';
+import type { IBoard } from '~/types/board.interface';
+import type { IUser } from '~/types/user.interface';
 
-export const useCanvasStore = defineStore("canvas", () => {
+export const useCanvasStore = defineStore('canvas', () => {
   const canvasSkeleton = ref(false);
   const board = ref<IBoard>({} as IBoard);
   const canvasRef = ref<HTMLCanvasElement>();
+  const elements = ref<Element[]>([]);
 
   const { getDocBoard, addNewCanvas, deleteCanvas } = useFirebaseCanvas();
   const authStore = useAuthStore();
@@ -32,8 +33,8 @@ export const useCanvasStore = defineStore("canvas", () => {
       await authStore.getCurrentSessionUser();
       board.value = {
         id: uuid(),
-        name: "untitled",
-        users: [{ id: authStore.user.id, email: authStore.user.email }],
+        name: 'untitled',
+        users: [{ id: authStore.user.id, email: authStore.user.email }]
       };
       const boardInfo = board.value;
       await addNewCanvas(boardInfo);
@@ -44,12 +45,10 @@ export const useCanvasStore = defineStore("canvas", () => {
 
   const updateCanvas = async (user: IUser) => {
     try {
-      const userExists = board.value.users.some(
-        (existsUser) => existsUser.id === user.id,
-      );
+      const userExists = board.value.users.some((existsUser) => existsUser.id === user.id);
       if (!userExists) {
         board.value.users.push({ id: user.id, email: user.email });
-        localStorage.setItem("board", JSON.stringify(board.value));
+        localStorage.setItem('board', JSON.stringify(board.value));
       }
     } catch (err) {
       console.log(err);
@@ -72,5 +71,6 @@ export const useCanvasStore = defineStore("canvas", () => {
     getBoard,
     setBoard,
     canvasRef,
+    elements
   };
 });

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Element } from '~/types/element.type';
+
 useSeoMeta({
   title: 'Boardify - virtual whiteboard for collaborative solutions'
 });
@@ -8,6 +10,7 @@ definePageMeta({
 
 const color = ref<string>('#000');
 const lineWidth = ref<number>(5.3);
+const elements = ref<Element[]>([]);
 
 const {
   changeEraser,
@@ -35,22 +38,19 @@ provide('changeColor', {
 
 const {
   saveImage,
-  resetImage,
-  isDragg,
-  isGrid,
-  isSave,
   onDraggable,
   onSelect,
   onDraw,
   onGrid,
   deleteGrid,
-  isRectangle,
   onRectangle,
   isTool,
   onText
 } = useUiSettingsDraw();
 
 provide('saveImage', { saveImage });
+
+const { onDelete } = useRemoveCanvas(elements);
 
 const authStore = useAuthStore();
 const canvasStore = useCanvasStore();
@@ -63,8 +63,13 @@ onMounted(async () => {
 
 <template>
   <div class="relative h-screen w-full select-none bg-gray-50">
-    <WhiteboardCanvas :is-tool="isTool" :color="color" :line-width="lineWidth" />
-    <WhiteboardName />
+    <WhiteboardCanvas
+      :is-tool="isTool"
+      :color="color"
+      :line-width="lineWidth"
+      :elements="elements"
+    />
+    <WhiteboardName @on-delete="onDelete" />
     <WhiteboardDrawSettings
       @on-save="saveImage"
       @on-draggable="onDraggable"
@@ -82,5 +87,3 @@ onMounted(async () => {
     <WhiteboardUndoRedo />
   </div>
 </template>
-
-<style scoped></style>
