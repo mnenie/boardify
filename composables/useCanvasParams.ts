@@ -19,7 +19,10 @@ export default function useCanvas(elements: Ref<Element[]>, canvas: Ref<HTMLCanv
   }: Element): Element => {
     switch (type) {
       case ElementType.Rectangle:
-        const roughElement = generator.rectangle(x1, y1, x2 - x1, y2 - y1, { fill: color });
+        const roughElement = generator.rectangle(x1, y1, x2 - x1, y2 - y1, {
+          fill: color,
+          stroke: color
+        });
         return { id, x1, y1, x2, y2, type, roughElement, color, lineWidth };
       case ElementType.Pensil:
         return {

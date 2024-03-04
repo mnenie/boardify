@@ -31,7 +31,7 @@ const canvasStore = useCanvasStore()
 <template>
   <div v-if="canvasStore.canvasSkeleton"
     class="flex gap-8 items-center p-2 fixed bg-white rounded-md shadow-xl bottom-2 right-1/2 translate-x-1/2 h-12 overflow-hidden">
-    <NuxtImg v-for="item in draws" @click="changeActiveElement(item.id)" class="mt-12 w-6 h-20 transition duration-300 ease-in cursor-pointer" :src="item.src" :class="{'active' : item.active}" />
+    <NuxtImg v-for="item in draws" @click="changeActiveElement(item.id)" class="mt-12 w-[23px] h-20 transition duration-300 ease-in cursor-pointer" :src="item.src" :class="{'active' : item.active}" />
   </div>
   <UiSkeleton class="h-12 fixed bg-gray-200 rounded-md shadow-xl bottom-2 right-1/2 translate-x-1/2 w-[480px]" v-else />
 </template>
