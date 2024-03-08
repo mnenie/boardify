@@ -64,6 +64,17 @@ export const useCanvasStore = defineStore('canvas', () => {
     }
   };
 
+  const renameBoard = async(newName: string) => {
+    try{
+      board.value.name = newName
+      localStorage.setItem('board', JSON.stringify(board.value));
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
+
+
   return {
     canvasSkeleton,
     setCanvasSkeleton,
@@ -71,6 +82,7 @@ export const useCanvasStore = defineStore('canvas', () => {
     getBoard,
     setBoard,
     canvasRef,
-    elements
+    elements,
+    renameBoard
   };
 });

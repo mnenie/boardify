@@ -101,7 +101,7 @@ onUnmounted(() => {
 <template>
   <canvas
     ref="canvas"
-    class="pointer-events-auto absolute dark:bg-neutral-800"
+    class="pointer-events-auto absolute w-full h-full dark:bg-neutral-800"
     @mousedown="onMouseDown"
     @mouseup="onMouseUp"
     @mousemove="onMouseMove"

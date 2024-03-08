@@ -80,7 +80,7 @@ onMounted(async () => {
       @on-text="onText"
       @on-select="onSelect"
     />
-    <WhiteboardUsers />
+    <WhiteboardUsers @on-draggable="onDraggable" @on-draw="onDraw" />
     <WhiteboardScale @minus-zoom="" />
     <WhiteboardMode />
     <WhiteboardDrawItems />

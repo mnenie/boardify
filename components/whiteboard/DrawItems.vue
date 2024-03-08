@@ -1,9 +1,18 @@
 <script setup lang="ts">
-import { useCanvasStore } from '~/store/canvas.store';
 import type { ChangeColorMethods } from '~/types/methods.type';
 import type { IDrawUi } from '~/types/ui.interfase';
 const injectedMethods: ChangeColorMethods | undefined = inject('changeColor');
-const { changeEraser, changePen, changeHighlighterBlack, changePencilBlack, changePencilRed, changePencilGreen, changePencilBlue, changePencilPurple, changeHighlighterRed } = injectedMethods || {};
+const {
+  changeEraser,
+  changePen,
+  changeHighlighterBlack,
+  changePencilBlack,
+  changePencilRed,
+  changePencilGreen,
+  changePencilBlue,
+  changePencilPurple,
+  changeHighlighterRed
+} = injectedMethods || {};
 
 const draws = ref<IDrawUi[]>([
   { id: 0, src: './img/eraser.jpg', active: false, event: changeEraser },
@@ -14,30 +23,44 @@ const draws = ref<IDrawUi[]>([
   { id: 5, src: '/img/purple.jpg', active: false, event: changePencilPurple },
   { id: 6, src: '/img/blue.jpg', active: false, event: changePencilBlue },
   { id: 7, src: '/img/marker-black.jpg', active: false, event: changeHighlighterBlack },
-  { id: 8, src: '/img/marker-red.jpg', active: false, event: changeHighlighterRed },
-])
+  { id: 8, src: '/img/marker-red.jpg', active: false, event: changeHighlighterRed }
+]);
 
 const changeActiveElement = (id: number) => {
-  const selectedElement = draws.value.find(i => i.id == id)
+  const selectedElement = draws.value.find((i) => i.id == id);
   selectedElement && selectedElement.event && selectedElement.event();
   draws.value.map((btn, i) => {
-    btn.active = i === id
-  })
-}
+    btn.active = i === id;
+  });
+};
 
-const canvasStore = useCanvasStore()
+const canvasStore = useCanvasStore();
+const presentationStore = usePresentation();
 </script>
 
 <template>
-  <div v-if="canvasStore.canvasSkeleton"
-    class="flex gap-8 items-center p-2 fixed bg-white rounded-md shadow-xl bottom-2 right-1/2 translate-x-1/2 h-12 overflow-hidden">
-    <NuxtImg v-for="item in draws" @click="changeActiveElement(item.id)" class="mt-12 w-[23px] h-20 transition duration-300 ease-in cursor-pointer" :src="item.src" :class="{'active' : item.active}" />
+  <div v-show="!presentationStore.presentation">
+    <div
+      v-if="canvasStore.canvasSkeleton"
+      class="fixed bottom-2 right-1/2 flex h-12 translate-x-1/2 items-center gap-8 overflow-hidden rounded-md bg-white p-2 shadow-xl"
+    >
+      <NuxtImg
+        v-for="item in draws"
+        @click="changeActiveElement(item.id)"
+        class="mt-12 h-20 w-[23px] cursor-pointer transition duration-300 ease-in"
+        :src="item.src"
+        :class="{ active: item.active }"
+      />
+    </div>
+    <UiSkeleton
+      v-else
+      class="fixed bottom-2 right-1/2 h-12 w-[480px] translate-x-1/2 rounded-md bg-gray-200 shadow-xl"
+    />
   </div>
-  <UiSkeleton class="h-12 fixed bg-gray-200 rounded-md shadow-xl bottom-2 right-1/2 translate-x-1/2 w-[480px]" v-else />
 </template>
 
 <style scoped>
-.active{
+.active {
   margin-top: 36px;
 }
 </style>

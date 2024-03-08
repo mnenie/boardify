@@ -3,6 +3,11 @@ const emit = defineEmits(['update:project'])
 const props = defineProps<{
   project: string
 }>()
+const canvasStore = useCanvasStore()
+const updateProject = async (e: Event) => {
+  await canvasStore.renameBoard(props.project)
+  emit('update:project', (e.target as HTMLInputElement).value)
+}
 </script>
 
 <template>
@@ -17,7 +22,7 @@ const props = defineProps<{
           This action provide rename your project-name
         </UiSheetDescription>
       </UiSheetHeader>
-      <UiInput class="mb-4" :model-value="project" @input="emit('update:project', ($event.target as HTMLInputElement).value)" />
+      <UiInput class="mb-4" :model-value="project" @input="updateProject" />
       <UiSheetClose as-child>
           <UiButton type="submit">
             Rename

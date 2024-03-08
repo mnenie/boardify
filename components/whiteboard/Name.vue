@@ -7,14 +7,12 @@ const { isLoading, data } = useUsersQuery();
 const emit = defineEmits<{
   (e: 'onDelete'): void;
 }>();
-
-const project = computed(() => {
-  return 'ffsdfds';
-});
+const projectName = ref('')
 const canvasStore = useCanvasStore();
 
 onMounted(async () => {
   await canvasStore.getBoard();
+  projectName.value = canvasStore.board.name!;
 });
 </script>
 
@@ -27,7 +25,7 @@ onMounted(async () => {
     <div class="mr-2 h-5 w-px bg-gray-300"></div>
     <div class="flex items-center gap-2 pr-2">
       <span v-if="!isLoading" class="select-none text-lg font-normal text-gray-950">{{
-        canvasStore.board.name
+        projectName
       }}</span>
       <UiSkeleton v-else-if="isLoading" class="h-5 w-[100px]"></UiSkeleton>
       <div v-if="online" class="h-2 w-2 rounded-full bg-green-600"></div>
@@ -35,13 +33,15 @@ onMounted(async () => {
     </div>
     <div class="mr-2 h-5 w-px bg-gray-300"></div>
     <div class="flex items-center gap-3">
-      <WhiteboardChangeSheet v-model:project="project">
+      <WhiteboardChangeSheet v-model:project="projectName">
         <Settings class="cursor-pointer" :size="20" :stroke-width="1.8" />
       </WhiteboardChangeSheet>
       <WhiteboardCanvasAlert @on-delete="emit('onDelete')">
         <Trash2 class="cursor-pointer" :size="20" :stroke-width="1.8" />
       </WhiteboardCanvasAlert>
-      <ExternalLink class="cursor-pointer" :size="20" :stroke-width="1.8" />
+      <WhiteboardShareSheet>
+        <ExternalLink class="cursor-pointer" :size="20" :stroke-width="1.8" />
+      </WhiteboardShareSheet>
     </div>
   </div>
   <UiSkeleton class="fixed left-2 top-2 h-12 w-[390px] rounded-md bg-gray-200 shadow-xl" v-else />
