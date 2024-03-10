@@ -1,20 +1,25 @@
 import type { Props } from 'nuxt/dist/head/runtime/types';
+import type { Socket } from 'socket.io-client';
 import { ElementType } from '~/types/element.type';
 import type { Element } from '~/types/element.type';
-
+import useUndoRedo from './useUndoRedo';
 export default function useMouseEvents(
   action: Ref<string>,
   panOffset: Ref<{ x: number; y: number }>,
   props: Props,
   elements: Ref<Element[]>,
+  redoHistory: Ref<Element[][]>,
+  history: Ref<Element[][]>,
   selectedElement: Ref<Element | null>,
   startPanMousePosition: Ref<{ x: number; y: number }>,
-  canvas: Ref<HTMLCanvasElement | null>
+  canvas: Ref<HTMLCanvasElement | null>,
+  socket: Socket
 ) {
   const { getMouseCoords, resizeCoordinates, adjustElementCoordinates } = useCoordinates(panOffset);
   const { getElementInPosition } = usePosition(elements, canvas);
   const { createElement, cursorForPosition, updateElement } = useCanvasParams(elements, canvas);
-
+  const {addToHistory} = useUndoRedo(elements, history, redoHistory)
+  
   const onMouseDown = (e: MouseEvent) => {
     if (action.value === 'writing') return;
 
@@ -68,14 +73,22 @@ export default function useMouseEvents(
         color: props.color,
         lineWidth: props.lineWidth
       });
-      elements.value = [...elements.value, element];
+      elements.value = [...elements.value, element!];
       selectedElement!.value = element;
+      socket.emit('draw-elements', selectedElement.value);
       action.value = props.isTool === ElementType.Text ? 'writing' : 'draw';
+      if (action.value === 'draw' || action.value === 'mooving' || action.value === 'resizing' || action.value === 'writing') {
+        addToHistory();
+      }
     }
   };
 
   const onMouseMove = (e: MouseEvent) => {
     const { clientX, clientY } = getMouseCoords(e);
+    if (action.value === 'draw' || action.value === 'mooving' || action.value === 'resizing' || action.value === 'writing') {
+      addToHistory();
+    }
+    
 
     if (action.value === 'panning') {
       const deltaX = clientX - startPanMousePosition.value.x;
@@ -98,7 +111,7 @@ export default function useMouseEvents(
     } else if (props.isTool === ElementType.Text) {
       (e.target as HTMLElement)!.style.cursor = 'text';
     } else if (props.isTool === ElementType.Pensil) {
-      (e.target as HTMLElement)!.style.cursor = 'url(./icons/cursor.png) 0 30, auto';
+      (e.target as HTMLElement)!.style.cursor = 'url(./icons/cursor.svg) 0 30, auto';
     } else if (props.isTool === ElementType.Rectangle) {
       (e.target as HTMLElement)!.style.cursor = 'crosshair';
     }
@@ -116,6 +129,7 @@ export default function useMouseEvents(
         color: props.color,
         lineWidth: props.lineWidth
       });
+      socket.emit('draw-elements', selectedElement.value);
     } else if (action.value === 'mooving') {
       if (selectedElement.value?.type === ElementType.Pensil) {
         const newPoints = selectedElement.value!.points!.map((point, index) => ({
@@ -191,11 +205,14 @@ export default function useMouseEvents(
     if (action.value === 'panning') {
       action.value = 'none';
     }
+    if (action.value === 'draw' || action.value === 'mooving' || action.value === 'resizing' || action.value === 'writing') {
+      addToHistory();
+    }
   };
 
   return {
     onMouseDown,
     onMouseMove,
-    onMouseUp
+    onMouseUp,
   };
 }

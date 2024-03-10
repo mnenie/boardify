@@ -3,7 +3,6 @@ import { ElementType } from "~/types/element.type";
 export default function useUiSettingsDraw() {
   const isDragg = ref<boolean>(false);
   const isRectangle = ref<boolean>(false);
-  const isLine = ref<boolean>(false);
   const isTool = ref<ElementType>(ElementType.Pensil)
 
   const onSelect = () => {

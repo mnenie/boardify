@@ -6,7 +6,7 @@ import type { IUser } from '~/types/user.interface';
 export const useCanvasStore = defineStore('canvas', () => {
   const canvasSkeleton = ref(false);
   const board = ref<IBoard>({} as IBoard);
-  const canvasRef = ref<HTMLCanvasElement>();
+  const canvasRef = ref<HTMLCanvasElement | null>(null);
   const elements = ref<Element[]>([]);
 
   const { getDocBoard, addNewCanvas, deleteCanvas } = useFirebaseCanvas();

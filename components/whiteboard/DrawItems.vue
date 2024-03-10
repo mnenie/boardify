@@ -15,7 +15,7 @@ const {
 } = injectedMethods || {};
 
 const draws = ref<IDrawUi[]>([
-  { id: 0, src: './img/eraser.jpg', active: false, event: changeEraser },
+  { id: 0, src: '/img/white-pen.jpg', active: false, event: changeEraser },
   { id: 1, src: '/img/pen.jpg', active: true, event: changePen },
   { id: 2, src: '/img/black.jpg', active: false, event: changePencilBlack },
   { id: 3, src: '/img/red.jpg', active: false, event: changePencilRed },
@@ -44,7 +44,7 @@ const presentationStore = usePresentation();
       v-if="canvasStore.canvasSkeleton"
       class="fixed bottom-2 right-1/2 flex h-12 translate-x-1/2 items-center gap-8 overflow-hidden rounded-md bg-white p-2 shadow-xl"
     >
-      <NuxtImg
+      <img
         v-for="item in draws"
         @click="changeActiveElement(item.id)"
         class="mt-12 h-20 w-[23px] cursor-pointer transition duration-300 ease-in"

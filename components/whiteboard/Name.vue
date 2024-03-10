@@ -44,5 +44,5 @@ onMounted(async () => {
       </WhiteboardShareSheet>
     </div>
   </div>
-  <UiSkeleton class="fixed left-2 top-2 h-12 w-[390px] rounded-md bg-gray-200 shadow-xl" v-else />
+  <UiSkeleton class="fixed left-2 top-2 h-12 w-[340px] rounded-md bg-gray-200 shadow-xl" v-else />
 </template>

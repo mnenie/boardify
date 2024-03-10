@@ -3,8 +3,6 @@ import {
   Save,
   MousePointer2,
   Square,
-  Grid3X3,
-  FileUp,
   Hand,
   RectangleHorizontal,
   ALargeSmall,
@@ -40,10 +38,7 @@ const settingsMove = ref<IDrawSettings[]>([
   { id: 3, active: false, icon: RectangleHorizontal, event: () => emits('onRectangle') },
   { id: 4, active: false, icon: ALargeSmall, event: () => emits('onText') }
 ]);
-const settingsFiles = ref<IDrawSettings[]>([
-  { id: 0, icon: Save, event: saveImage },
-  { id: 1, icon: FileUp, event: () => emits('onUpload') }
-]);
+const settingsFiles = ref<IDrawSettings[]>([{ id: 0, icon: Save, event: saveImage }]);
 
 const changeActiveGridsSettings = (id: number) => {
   const activeSetting = settingsGrids.value.find((i) => i.id === id);

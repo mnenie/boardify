@@ -9,3 +9,9 @@ export type ChangeColorMethods = {
   changePencilPurple: () => void;
   changeHighlighterRed: () => void;
 }
+
+
+export type UndoRedo = {
+  undo: () => void;
+  redo: () => void;
+}

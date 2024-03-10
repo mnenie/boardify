@@ -1,21 +1,20 @@
-import type { User } from "firebase/auth";
-import useFirebaseAuth from "~/composables/useFirebaseAuth";
-import { Error } from "~/types/error.enum";
-import type { IUser } from "~/types/user.interface";
+import type { User } from 'firebase/auth';
+import useFirebaseAuth from '~/composables/useFirebaseAuth';
+import { Error } from '~/types/error.enum';
+import type { IUser } from '~/types/user.interface';
 
-export const useAuthStore = defineStore("auth", () => {
+export const useAuthStore = defineStore('auth', () => {
   const user = ref({} as IUser);
   const router = useRouter();
-  const token = useCookie("token");
-  const error = ref("");
-  const canvasStore = useCanvasStore();
+  const token = useCookie('token');
+  const error = ref('');
 
   const {
     onFirebaseRegistration,
     onFirebaseLogout,
     onFirebaseLogin,
     onGitHubLogin,
-    getCurrentUser,
+    getCurrentUser
   } = useFirebaseAuth();
 
   const login = async (email: string, password: string) => {
@@ -29,7 +28,7 @@ export const useAuthStore = defineStore("auth", () => {
     } catch (err: any) {
       switch (err.message) {
         case Error.INVALID_CREDS:
-          error.value = "Account was not found, please try again";
+          error.value = 'Account was not found, please try again';
           break;
       }
     }
@@ -46,7 +45,7 @@ export const useAuthStore = defineStore("auth", () => {
     } catch (err: any) {
       switch (err.message) {
         case Error.EMAIL_EXISTS:
-          error.value = "Email already exists";
+          error.value = 'Email already exists';
           break;
       }
     }
@@ -56,9 +55,9 @@ export const useAuthStore = defineStore("auth", () => {
     try {
       await onFirebaseLogout();
       user.value = {} as IUser;
-      token.value = "";
-      sessionStorage.removeItem("token");
-      const uid = useCookie("uid");
+      token.value = '';
+      sessionStorage.removeItem('token');
+      const uid = useCookie('uid');
       uid.value = null;
       await router.push(LOGIN_ROUTE);
     } catch (e) {
@@ -73,7 +72,7 @@ export const useAuthStore = defineStore("auth", () => {
         id: response?.user.uid!,
         email: response?.user.email!,
         name: response?.user.displayName!,
-        photoUrl: response?.user.photoURL!,
+        photoUrl: response?.user.photoURL!
       };
       //@ts-ignore
       token.value = response?.user.accessToken;
@@ -92,7 +91,7 @@ export const useAuthStore = defineStore("auth", () => {
         id: response.uid,
         email: response.email!,
         name: response.displayName!,
-        photoUrl: response.photoURL!,
+        photoUrl: response.photoURL!
       };
     } catch (err) {
       console.log(err);
@@ -106,6 +105,6 @@ export const useAuthStore = defineStore("auth", () => {
     logout,
     login,
     gitHubSession,
-    getCurrentSessionUser,
+    getCurrentSessionUser
   };
 });

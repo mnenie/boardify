@@ -8,7 +8,7 @@ type Point = {
   y: number;
 };
 
-export default function useDraw(elements: Ref<Element[]>, canvas: Ref<HTMLCanvasElement | null>) {
+export default function useDraw() {
   // experimental mode
   // const { getSvgPathFromStroke } = useCanvasParams(elements, canvas);
 
@@ -44,7 +44,7 @@ export default function useDraw(elements: Ref<Element[]>, canvas: Ref<HTMLCanvas
         break;
       case ElementType.Text:
         context.textBaseline = 'top';
-        context.font = '24px sans-serif';
+        context.font = '18px sans-serif';
         context.fillStyle = element.color;
         context.fillText(element.text!, element.x1, element.y1);
         break;

@@ -1,5 +1,11 @@
 <script setup lang="ts">
-const link = ref('link123')
+import {v4 as uuid} from 'uuid'
+import { toast } from 'vue-sonner';
+
+const link = uuid();
+const onShare = () => {
+  toast.error('On Experimental Mode Not For Production');
+}
 </script>
 
 <template>
@@ -16,7 +22,7 @@ const link = ref('link123')
       </UiSheetHeader>
       <UiInput class="mb-4" v-model="link" readonly />
       <UiSheetClose as-child>
-          <UiButton type="submit">
+          <UiButton @click="onShare" type="submit">
             Share
           </UiButton>
         </UiSheetClose>

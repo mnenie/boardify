@@ -11,6 +11,10 @@ definePageMeta({
 const color = ref<string>('#000');
 const lineWidth = ref<number>(5.3);
 const elements = ref<Element[]>([]);
+const canvas = ref<HTMLCanvasElement | null>(null);
+
+const history = ref<Element[][]>([]);
+const redoHistory = ref<Element[][]>([]);
 
 const {
   changeEraser,
@@ -23,6 +27,7 @@ const {
   changePencilBlue,
   changePencilPurple
 } = useUiDraw({ color, lineWidth });
+
 
 provide('changeColor', {
   changeEraser,
@@ -53,21 +58,25 @@ provide('saveImage', { saveImage });
 const { onDelete } = useRemoveCanvas(elements);
 
 const authStore = useAuthStore();
-const canvasStore = useCanvasStore();
+const canvasStore = useCanvasStore()
 
 onMounted(async () => {
   await authStore.getCurrentSessionUser();
   canvasStore.setCanvasSkeleton();
-});
+})
+
 </script>
 
 <template>
   <div class="relative h-screen w-full select-none bg-gray-50">
     <WhiteboardCanvas
+      :canvas="canvas"
       :is-tool="isTool"
       :color="color"
       :line-width="lineWidth"
       :elements="elements"
+      :history="history"
+      :redo-history="redoHistory"
     />
     <WhiteboardName @on-delete="onDelete" />
     <WhiteboardDrawSettings
@@ -84,6 +93,5 @@ onMounted(async () => {
     <WhiteboardScale @minus-zoom="" />
     <WhiteboardMode />
     <WhiteboardDrawItems />
-    <WhiteboardUndoRedo />
   </div>
 </template>

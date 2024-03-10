@@ -4,11 +4,8 @@ export default function useUiDraw({ color, lineWidth }: ISettingsUiDraw) {
   const { isDark } = useMode();
 
   const changeEraser = () => {
-    const colorErase = computed(() => {
-      return isDark.value ? 'rgb(38 38 38)' : 'rgb(249 250 251)';
-    });
-    color.value = colorErase.value;
-    lineWidth.value = 14;
+    color.value = '#fff'
+    lineWidth.value = 7;
   };
 
   const changePen = () => {
