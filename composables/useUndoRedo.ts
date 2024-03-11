@@ -28,24 +28,19 @@ export default function useUndoRedo(elements: Ref<Element[]>, history: Ref<Eleme
     if ((event.ctrlKey || event.metaKey) && event.key === 'z') {
       undo();
     }
-    event.preventDefault();
   };
   const handleRedoKeyPress = (event: KeyboardEvent) => {
     if ((event.ctrlKey || event.metaKey) && (event.key === 'y' || (event.shiftKey && event.key === 'Z'))) {
-      event.preventDefault();
       redo();
     }
   };
 
-  onMounted(() => {
-    window.addEventListener('keydown', handleUndoKeyPress);
-    window.addEventListener('keydown', handleRedoKeyPress);
-  });
-
-  onUnmounted(() => {
-    window.removeEventListener('keydown', handleUndoKeyPress);
-    window.removeEventListener('keydown', handleRedoKeyPress);
-  });
+  watchEffect(() => {
+    if (window) {
+      window.addEventListener('keydown', handleUndoKeyPress);
+      window.addEventListener('keydown', handleRedoKeyPress);
+    }
+  })
 
   return {
     addToHistory,

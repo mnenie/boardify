@@ -5,7 +5,8 @@ export enum ElementType {
   Selection = 'selection',
   None = 'none',
   Move = 'move',
-  Circle = 'circle'
+  Circle = 'circle',
+  Save = 'save',
 }
 
 export type Element = {

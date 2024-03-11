@@ -25,9 +25,11 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      charset: 'utf-8',
-      viewport:
-        'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, shrink-to-fit=no'
+      title: 'Boardify',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, shrink-to-fit=no' }
+      ]
     }
   }
 });

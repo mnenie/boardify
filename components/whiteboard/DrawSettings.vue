@@ -59,6 +59,21 @@ const changeActiveMoveSettings = (id: number) => {
   });
 };
 
+const changeActivePen = () => {
+  const penSetting = settingsMove.value.find((i) => i.id === 2);
+  if (penSetting && penSetting.event) {
+    penSetting.event();
+  }
+  settingsMove.value.map((btn, i) => {
+    btn.active = i === 2;
+  });
+};
+
+const saveImg = () => {
+  saveImage()
+  changeActivePen()
+}
+
 const canvasSkeleton = useCanvasStore();
 const presentationStore = usePresentation();
 </script>
@@ -67,7 +82,7 @@ const presentationStore = usePresentation();
   <div v-show="!presentationStore.presentation">
     <div
       v-if="canvasSkeleton.canvasSkeleton"
-      class="fixed left-2 top-1/2 flex w-12 -translate-y-1/2 flex-col items-center gap-1 rounded-md bg-white p-2 shadow-xl"
+      class="absolute left-2 top-1/2 flex w-12 -translate-y-1/2 flex-col items-center gap-1 rounded-md bg-white p-2 shadow-xl"
     >
       <div v-for="i in settingsMove" class="rounded-md p-1.5" :class="{ active: i.active }">
         <component
@@ -84,7 +99,7 @@ const presentationStore = usePresentation();
           :stroke-width="1.8"
           :is="i.icon"
           class="cursor-pointer"
-          @click="i.event"
+          @click="saveImg"
         />
       </div>
       <div v-for="i in settingsGrids" class="rounded-md p-1.5" :class="{ active: i.active }">

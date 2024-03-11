@@ -11,5 +11,5 @@ const canvasSkeleton = useCanvasStore()
     <Moon v-show="isDark" :size="20" :stroke-width="2" />
     <Sun v-show="!isDark" :size="20" :stroke-width="2" />
   </div>
-  <UiSkeleton class="h-12 fixed bg-gray-200 rounded-md shadow-xl bottom-2 left-2 w-12" v-else />
+  <UiSkeleton class="h-12 absolute bg-gray-200 rounded-md shadow-xl bottom-2 left-2 w-12" v-else />
 </template>

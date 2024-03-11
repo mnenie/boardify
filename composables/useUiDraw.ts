@@ -3,7 +3,7 @@ import type { ISettingsUiDraw } from '~/types/ui.interfase';
 export default function useUiDraw({ color, lineWidth }: ISettingsUiDraw) {
   const { isDark } = useMode();
 
-  const changeEraser = () => {
+  const changeWhitePen = () => {
     color.value = '#fff'
     lineWidth.value = 7;
   };
@@ -46,7 +46,7 @@ export default function useUiDraw({ color, lineWidth }: ISettingsUiDraw) {
   return {
     color,
     lineWidth,
-    changeEraser,
+    changeWhitePen,
     changePencilBlack,
     changePencilRed,
     changePencilGreen,

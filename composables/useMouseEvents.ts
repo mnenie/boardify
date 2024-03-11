@@ -13,13 +13,19 @@ export default function useMouseEvents(
   selectedElement: Ref<Element | null>,
   startPanMousePosition: Ref<{ x: number; y: number }>,
   canvas: Ref<HTMLCanvasElement | null>,
-  socket: Socket
+  socket: Socket,
+  scale: Ref<number>,
+  scaleOffset: Ref<{ x: number; y: number }>
 ) {
-  const { getMouseCoords, resizeCoordinates, adjustElementCoordinates } = useCoordinates(panOffset);
+  const { getMouseCoords, resizeCoordinates, adjustElementCoordinates } = useCoordinates(
+    panOffset,
+    scale,
+    scaleOffset
+  );
   const { getElementInPosition } = usePosition(elements, canvas);
   const { createElement, cursorForPosition, updateElement } = useCanvasParams(elements, canvas);
-  const {addToHistory} = useUndoRedo(elements, history, redoHistory)
-  
+  const { addToHistory } = useUndoRedo(elements, history, redoHistory);
+
   const onMouseDown = (e: MouseEvent) => {
     if (action.value === 'writing') return;
 
@@ -47,7 +53,8 @@ export default function useMouseEvents(
           action.value = 'resizing';
         }
       }
-    } else if (props.isTool === ElementType.Move && elements.value) {
+      addToHistory()
+    }else if (props.isTool === ElementType.Selection && elements.value) {
       const element = getElementInPosition(clientX, clientY, elements.value);
       if (element) {
         if (element.type === ElementType.Pensil) {
@@ -60,6 +67,12 @@ export default function useMouseEvents(
           selectedElement!.value = { ...element, offsetX, offsetY }!;
         }
         elements.value = elements.value;
+        if (element.position === 'inside') {
+          action.value = 'mooving';
+        } else {
+          action.value = 'resizing';
+        }
+        addToHistory();
       }
     } else {
       const id = elements.value ? elements.value.length : 0;
@@ -77,18 +90,12 @@ export default function useMouseEvents(
       selectedElement!.value = element;
       socket.emit('draw-elements', selectedElement.value);
       action.value = props.isTool === ElementType.Text ? 'writing' : 'draw';
-      if (action.value === 'draw' || action.value === 'mooving' || action.value === 'resizing' || action.value === 'writing') {
-        addToHistory();
-      }
+      addToHistory();
     }
   };
 
   const onMouseMove = (e: MouseEvent) => {
     const { clientX, clientY } = getMouseCoords(e);
-    if (action.value === 'draw' || action.value === 'mooving' || action.value === 'resizing' || action.value === 'writing') {
-      addToHistory();
-    }
-    
 
     if (action.value === 'panning') {
       const deltaX = clientX - startPanMousePosition.value.x;
@@ -117,6 +124,7 @@ export default function useMouseEvents(
     }
 
     if (action.value === 'draw') {
+      addToHistory();
       const index = elements.value.length - 1;
       const { x1, y1 } = elements.value[index];
       updateElement({
@@ -205,7 +213,12 @@ export default function useMouseEvents(
     if (action.value === 'panning') {
       action.value = 'none';
     }
-    if (action.value === 'draw' || action.value === 'mooving' || action.value === 'resizing' || action.value === 'writing') {
+    if (
+      action.value === 'draw' ||
+      action.value === 'mooving' ||
+      action.value === 'resizing' ||
+      action.value === 'writing'
+    ) {
       addToHistory();
     }
   };
@@ -213,6 +226,6 @@ export default function useMouseEvents(
   return {
     onMouseDown,
     onMouseMove,
-    onMouseUp,
+    onMouseUp
   };
 }

@@ -40,7 +40,7 @@ const changeTool = () => {
 <template>
   <div
     v-if="canvasStore.canvasSkeleton"
-    class="fixed right-2 top-2 flex h-12 items-center gap-2 rounded-md bg-white p-2 shadow-xl"
+    class="absolute right-2 top-2 flex h-12 items-center gap-2 rounded-md bg-white p-2 shadow-xl"
   >
     <div class="mr-2 flex items-center gap-3">
       <HeartHandshake

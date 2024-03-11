@@ -5,8 +5,14 @@
 body {
   overflow: hidden;
   -webkit-text-size-adjust: 100%;
+  max-width: 100%;
 }
 
 html{
   overscroll-behavior-x: auto;
+}
+
+html, body {
+  touch-action: manipulation;
+  overscroll-behavior-y: none;
 }

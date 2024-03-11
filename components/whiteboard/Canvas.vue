@@ -4,6 +4,7 @@ import { ElementType } from '~/types/element.type';
 import type { Element } from '~/types/element.type';
 import { Action } from '~/types/action.enum';
 import { io } from 'socket.io-client';
+import { saveCanvas } from '~/helpers/helperSaveCanvasPng';
 
 const props = defineProps<{
   isTool: ElementType;
@@ -13,6 +14,11 @@ const props = defineProps<{
   history: Array<Element[]>;
   redoHistory: Array<Element[]>;
   canvas: HTMLCanvasElement | null;
+  isSave: boolean;
+}>();
+
+const emit = defineEmits<{
+  (e: 'resetImgTool'): void;
 }>();
 
 const socket = io('/draw', {
@@ -23,17 +29,17 @@ const elements = toRef(props.elements);
 const canvas = toRef(props.canvas);
 const action = ref('none');
 const selectedElement = ref<Element | null>(null);
-const panOffset = ref({ x: 0, y: 0 });
-const startPanMousePosition = ref({ x: 0, y: 0 });
 const scale = ref(1);
 const scaleOffset = ref({ x: 0, y: 0 });
+const panOffset = ref({ x: 0, y: 0 });
+const startPanMousePosition = ref({ x: 0, y: 0 });
 const textArea = ref<HTMLTextAreaElement | null>(null);
 const history = toRef(props.history);
 const redoHistory = toRef(props.redoHistory);
 
 const { handleResize } = useSizeParams(canvas);
 const { drawElement } = useDraw();
-const { panOrZoomFunction } = useWheelPanZoom(scale, panOffset);
+const { panOrZoomFunction, onZoom } = useWheelPanZoom(scale, panOffset);
 const { handleBlur } = useTextArea(selectedElement, action, elements, canvas);
 const { onMouseDown, onMouseMove, onMouseUp } = useMouseEvents(
   action,
@@ -45,11 +51,13 @@ const { onMouseDown, onMouseMove, onMouseUp } = useMouseEvents(
   selectedElement,
   startPanMousePosition,
   canvas,
-  socket
+  socket,
+  scale,
+  scaleOffset
 );
 const { saveToLocalStorage, loadFromLocalStorage } = useLocalCanvas(elements);
 
-const {undo, redo} = useUndoRedo(elements, history, redoHistory);
+const { undo, redo } = useUndoRedo(elements, history, redoHistory);
 
 const setParamsCanvas = () => {
   if (canvas.value) {
@@ -57,6 +65,7 @@ const setParamsCanvas = () => {
     const roughCanvas = rough.canvas(canvas.value);
 
     ctx?.clearRect(0, 0, canvas.value.width, canvas.value.height);
+
     const scaleWidth = canvas.value.width * scale.value;
     const scaleHeight = canvas.value.height * scale.value;
 
@@ -85,12 +94,6 @@ const setParamsCanvas = () => {
 onMounted(() => {
   loadFromLocalStorage();
   handleResize();
-  socket.emit('client-ready');
-  socket.on('get-canvas', () => {
-    if (!canvas.value?.toDataURL()) return;
-    socket.emit('canvas-state', canvas.value.toDataURL());
-    loadFromLocalStorage();
-  });
   document.addEventListener('mouseleave', () => {
     action.value = 'none';
     selectedElement.value = null;
@@ -107,19 +110,6 @@ onUnmounted(() => {
 
 watchEffect(() => {
   setParamsCanvas();
-});
-
-watchEffect(() => {
-  if (canvas.value) {
-    const ctx = canvas.value?.getContext('2d');
-    socket.on('draw-elements', (element: Element) => {
-      if (!ctx) return console.log('no ctx here');
-      drawElement(rough.canvas(canvas.value), ctx, element);
-    });
-  }
-});
-
-watchEffect(() => {
   if (document) {
     document.addEventListener('wheel', panOrZoomFunction);
   }
@@ -130,6 +120,19 @@ watchEffect(() => {
     }, 0);
   }
 });
+
+watch(
+  () => props.isSave,
+  (newValue) => {
+    if (canvas.value) {
+      if (newValue) {
+        saveCanvas(canvas);
+        emit('resetImgTool')
+      }
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -145,14 +148,15 @@ watchEffect(() => {
   <textarea
     v-if="action === 'writing'"
     ref="textArea"
-    class="fixed z-10 m-0 w-full resize-none border-0 bg-transparent p-0 outline-0"
+    class="fixed z-10 m-0 w-full resize-none overflow-hidden border-0 bg-transparent p-0 outline-0"
     :style="{
-      top: selectedElement?.y1! - 2 + panOffset.y + 'px',
-      left: selectedElement?.x1! + panOffset.x + 'px',
-      font: '18px sans-serif',
+      top: (selectedElement?.y1! - 2) * scale + panOffset.y * scale - scaleOffset.y + 'px',
+      left: selectedElement?.x1! * scale + panOffset.x * scale - scaleOffset.x + 'px',
+      font: `${18 * scale}px sans-serif`,
       color: color
     }"
     @blur="handleBlur"
   />
-  <whiteboard-undo-redo @undo="undo" @redo="redo" />
+  <WhiteboardUndoRedo @undo="undo" @redo="redo" />
+  <WhiteboardScale :scale="scale" @minus-zoom="() => onZoom(-0.1)" @plus-zoom="() => onZoom(0.1)" />
 </template>

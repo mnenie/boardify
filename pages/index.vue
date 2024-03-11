@@ -17,7 +17,7 @@ const history = ref<Element[][]>([]);
 const redoHistory = ref<Element[][]>([]);
 
 const {
-  changeEraser,
+  changeWhitePen,
   changePen,
   changeHighlighterBlack,
   changeHighlighterRed,
@@ -28,9 +28,8 @@ const {
   changePencilPurple
 } = useUiDraw({ color, lineWidth });
 
-
 provide('changeColor', {
-  changeEraser,
+  changeWhitePen,
   changePen,
   changeHighlighterBlack,
   changeHighlighterRed,
@@ -47,10 +46,12 @@ const {
   onSelect,
   onDraw,
   onGrid,
+  isSave,
   deleteGrid,
   onRectangle,
   isTool,
-  onText
+  onText,
+  resetImage
 } = useUiSettingsDraw();
 
 provide('saveImage', { saveImage });
@@ -58,13 +59,12 @@ provide('saveImage', { saveImage });
 const { onDelete } = useRemoveCanvas(elements);
 
 const authStore = useAuthStore();
-const canvasStore = useCanvasStore()
+const canvasStore = useCanvasStore();
 
 onMounted(async () => {
   await authStore.getCurrentSessionUser();
   canvasStore.setCanvasSkeleton();
-})
-
+});
 </script>
 
 <template>
@@ -77,6 +77,8 @@ onMounted(async () => {
       :elements="elements"
       :history="history"
       :redo-history="redoHistory"
+      :is-save="isSave"
+      @reset-img-tool="resetImage"
     />
     <WhiteboardName @on-delete="onDelete" />
     <WhiteboardDrawSettings
@@ -90,7 +92,6 @@ onMounted(async () => {
       @on-select="onSelect"
     />
     <WhiteboardUsers @on-draggable="onDraggable" @on-draw="onDraw" />
-    <WhiteboardScale @minus-zoom="" />
     <WhiteboardMode />
     <WhiteboardDrawItems />
   </div>

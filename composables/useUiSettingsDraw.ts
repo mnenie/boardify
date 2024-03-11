@@ -1,15 +1,15 @@
-import { ElementType } from "~/types/element.type";
+import { ElementType } from '~/types/element.type';
 
 export default function useUiSettingsDraw() {
   const isDragg = ref<boolean>(false);
   const isRectangle = ref<boolean>(false);
-  const isTool = ref<ElementType>(ElementType.Pensil)
+  const isTool = ref<ElementType>(ElementType.Pensil);
 
   const onSelect = () => {
-    isTool.value = ElementType.Selection
+    isTool.value = ElementType.Selection;
   };
   const onDraw = () => {
-    isTool.value = ElementType.Pensil
+    isTool.value = ElementType.Pensil;
   };
 
   const isGrid = ref<boolean>(true);
@@ -22,25 +22,26 @@ export default function useUiSettingsDraw() {
 
   const isSave = ref<boolean>(false);
   const saveImage = () => {
+    isTool.value = ElementType.Save;
     isSave.value = true;
   };
 
   const resetImage = () => {
     isSave.value = false;
+    isTool.value = ElementType.Pensil;
   };
 
   const onRectangle = () => {
-    isTool.value = ElementType.Rectangle
+    isTool.value = ElementType.Rectangle;
   };
 
   const onText = () => {
-    isTool.value = ElementType.Text
-  }
+    isTool.value = ElementType.Text;
+  };
 
   const onDraggable = () => {
-    isTool.value = ElementType.Move
-  }
-
+    isTool.value = ElementType.Move;
+  };
 
   return {
     isSave,

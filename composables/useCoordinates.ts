@@ -1,7 +1,7 @@
 import { ElementType } from '~/types/element.type';
 import type { Element } from '~/types/element.type';
 
-export default function useCoordinates(panOffset: Ref<{ x: number; y: number }>) {
+export default function useCoordinates(panOffset: Ref<{ x: number; y: number }>, scale: Ref<number>, scaleOffset: Ref<{ x: number; y: number}>) {
   const resizeCoordinates = (
     clientX: number,
     clientY: number,
@@ -23,8 +23,8 @@ export default function useCoordinates(panOffset: Ref<{ x: number; y: number }>)
     }
   };
   const getMouseCoords = (e: MouseEvent) => {
-    const clientX = e.clientX - panOffset.value.x;
-    const clientY = e.clientY - panOffset.value.y;
+    const clientX = (e.clientX - panOffset.value.x * scale.value + scaleOffset.value.x) / scale.value;
+    const clientY = (e.clientY - panOffset.value.y * scale.value + scaleOffset.value.y) / scale.value;
     return { clientX, clientY };
   };
 

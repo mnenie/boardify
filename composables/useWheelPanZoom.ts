@@ -7,8 +7,7 @@ export default function useWheelPanZoom(
   };
 
   const panOrZoomFunction = (e: WheelEvent) => {
-    const isCtrlPressed = e.ctrlKey || e.metaKey;
-    if (isCtrlPressed) {
+    if (e.ctrlKey || e.metaKey) {
       e.preventDefault();
       onZoom(e.deltaY * 0.01);
     } else {

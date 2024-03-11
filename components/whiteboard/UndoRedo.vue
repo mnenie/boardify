@@ -13,7 +13,7 @@ const emits = defineEmits<{
 <template>
   <div
     v-if="canvasStore.canvasSkeleton"
-    class="fixed bottom-2 right-32 flex h-12 items-center gap-5 rounded-md bg-white p-2 shadow-xl"
+    class="absolute bottom-2 right-32 flex h-12 items-center gap-5 rounded-md bg-white p-2 shadow-xl"
   >
     <Undo2 :size="20" :stroke-width="1.8" @click="emits('undo')" class="cursor-pointer" />
     <Redo2 :size="20" :stroke-width="1.8" @click="emits('redo')" class="cursor-pointer" />

@@ -1,5 +1,5 @@
 export type ChangeColorMethods = {
-  changeEraser: () => void;
+  changeWhitePen: () => void;
   changePen: () => void;
   changeHighlighterBlack: () => void;
   changePencilBlack: () => void;
