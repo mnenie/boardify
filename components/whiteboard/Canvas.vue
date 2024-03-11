@@ -94,6 +94,12 @@ const setParamsCanvas = () => {
 onMounted(() => {
   loadFromLocalStorage();
   handleResize();
+  socket.emit('client-ready');
+  socket.on('get-canvas', () => {
+    if (!canvas.value?.toDataURL()) return;
+    socket.emit('canvas-state', canvas.value.toDataURL());
+    loadFromLocalStorage();
+  });
   document.addEventListener('mouseleave', () => {
     action.value = 'none';
     selectedElement.value = null;
@@ -110,6 +116,19 @@ onUnmounted(() => {
 
 watchEffect(() => {
   setParamsCanvas();
+});
+
+watchEffect(() => {
+  if (canvas.value) {
+    const ctx = canvas.value?.getContext('2d');
+    socket.on('draw-elements', (element: Element) => {
+      if (!ctx) return console.log('no ctx here');
+      drawElement(rough.canvas(canvas.value), ctx, element);
+    });
+  }
+});
+
+watchEffect(() => {
   if (document) {
     document.addEventListener('wheel', panOrZoomFunction);
   }
