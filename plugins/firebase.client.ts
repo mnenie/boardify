@@ -6,7 +6,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     const config = useRuntimeConfig()
 
     const firebaseConfig = {
-        apiKey: config.public.firebaseApi,
+        apiKey: config.public.NUXT_PUBLIC_FIREBASE_API_KEY as string,
         authDomain: "boardify-dbb3a.firebaseapp.com",
         projectId: "boardify-dbb3a",
         storageBucket: "boardify-dbb3a.appspot.com",
