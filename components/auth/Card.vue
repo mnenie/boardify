@@ -3,7 +3,7 @@ const route = useRoute();
 </script>
 
 <template>
-  <div class="h-screen w-1/2 flex justify-center items-center dark:bg-gray-950">
+  <div class="h-screen w-1/2 flex justify-center items-center dark:bg-gray-950 md:w-2/3 xl:w-1/2">
     <UiCard class="flex-col w-2/3 items-center">
       <UiCardHeader class="flex items-center">
         <UiCardTitle class="mb-px">{{

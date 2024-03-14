@@ -1,8 +1,14 @@
+<script setup lang="ts">
+import { useWindowSize } from '@vueuse/core'
+const { width, height } = useWindowSize()
+</script>
+
 <template>
-  <div class="flex w-full relative">
+  <div v-if="width > 992" class="flex w-full relative main_container">
     <div class="content_form w-1/2 h-screen" />
     <AuthCard />
   </div>
+  <ScreenNotAvailable v-else />
 </template>
 
 <style scoped>
@@ -21,6 +27,15 @@
   }
   100% {
     background-position: 0% 50%;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .content_form{
+    display: none;
+  }
+  .main_container{
+    justify-content: center;
   }
 }
 </style>

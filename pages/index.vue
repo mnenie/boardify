@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Element } from '~/types/element.type';
+import { useWindowSize } from '@vueuse/core'
 
 useSeoMeta({
   title: 'Boardify - virtual whiteboard for collaborative solutions'
@@ -65,10 +66,12 @@ onMounted(async () => {
   await authStore.getCurrentSessionUser();
   canvasStore.setCanvasSkeleton();
 });
+
+const { width, height } = useWindowSize()
 </script>
 
 <template>
-  <div class="relative h-screen w-full select-none bg-gray-50">
+  <div v-if="width > 992" class="relative h-screen w-full select-none bg-gray-50">
     <WhiteboardCanvas
       :canvas="canvas"
       :is-tool="isTool"
@@ -95,4 +98,5 @@ onMounted(async () => {
     <WhiteboardMode />
     <WhiteboardDrawItems />
   </div>
+  <ScreenNotAvailable v-else />
 </template>
