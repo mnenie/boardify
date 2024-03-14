@@ -13,7 +13,6 @@ export default function useMouseEvents(
   selectedElement: Ref<Element | null>,
   startPanMousePosition: Ref<{ x: number; y: number }>,
   canvas: Ref<HTMLCanvasElement | null>,
-  socket: Socket,
   scale: Ref<number>,
   scaleOffset: Ref<{ x: number; y: number }>
 ) {
@@ -88,7 +87,6 @@ export default function useMouseEvents(
       });
       elements.value = [...elements.value, element!];
       selectedElement!.value = element;
-      socket.emit('draw-elements', selectedElement.value);
       action.value = props.isTool === ElementType.Text ? 'writing' : 'draw';
       addToHistory();
     }
@@ -137,7 +135,6 @@ export default function useMouseEvents(
         color: props.color,
         lineWidth: props.lineWidth
       });
-      socket.emit('draw-elements', selectedElement.value);
     } else if (action.value === 'mooving') {
       if (selectedElement.value?.type === ElementType.Pensil) {
         const newPoints = selectedElement.value!.points!.map((point, index) => ({

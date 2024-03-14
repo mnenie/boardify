@@ -21,9 +21,9 @@ const emit = defineEmits<{
   (e: 'resetImgTool'): void;
 }>();
 
-const socket = io('/draw', {
-  path: '/api/socket.io'
-});
+// const socket = io('/draw', {
+//   path: '/api/socket.io'
+// });
 
 const elements = toRef(props.elements);
 const canvas = toRef(props.canvas);
@@ -51,7 +51,6 @@ const { onMouseDown, onMouseMove, onMouseUp } = useMouseEvents(
   selectedElement,
   startPanMousePosition,
   canvas,
-  socket,
   scale,
   scaleOffset
 );
@@ -94,12 +93,13 @@ const setParamsCanvas = () => {
 onMounted(() => {
   loadFromLocalStorage();
   handleResize();
-  socket.emit('client-ready');
-  socket.on('get-canvas', () => {
-    if (!canvas.value?.toDataURL()) return;
-    socket.emit('canvas-state', canvas.value.toDataURL());
-    loadFromLocalStorage();
-  });
+  // socket.emit('client-ready');
+  // socket.on('get-canvas', () => {
+  //   if (!canvas.value?.toDataURL()) return;
+  //   socket.emit('canvas-state', canvas.value.toDataURL());
+  //   loadFromLocalStorage();
+  // });
+  // in dev mode
   document.addEventListener('mouseleave', () => {
     action.value = 'none';
     selectedElement.value = null;
@@ -121,10 +121,11 @@ watchEffect(() => {
 watchEffect(() => {
   if (canvas.value) {
     const ctx = canvas.value?.getContext('2d');
-    socket.on('draw-elements', (element: Element) => {
-      if (!ctx) return console.log('no ctx here');
-      drawElement(rough.canvas(canvas.value), ctx, element);
-    });
+    // socket.on('draw-elements', (element: Element) => {
+    //   if (!ctx) return console.log('no ctx here');
+    //   drawElement(rough.canvas(canvas.value), ctx, element);
+    // });
+    // in dev mode 
   }
 });
 
