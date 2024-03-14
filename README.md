@@ -22,7 +22,7 @@ Boardify - virtual whiteboard for your own and collaborative solutions.
 </div>
 
 
-**Boardify available at the link:**
+**Boardify available at the link:** https://boardify-whiteboard.netlify.app/
 
 ---
 
