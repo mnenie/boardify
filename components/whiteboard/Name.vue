@@ -7,12 +7,12 @@ const { isLoading, data } = useUsersQuery();
 const emit = defineEmits<{
   (e: 'onDelete'): void;
 }>();
-const projectName = ref('')
+const projectName = ref('untitled')
 const canvasStore = useCanvasStore();
 
 onBeforeMount(async () => {
   await canvasStore.getBoard();
-  projectName.value = canvasStore.board.name! ? canvasStore.board.name! : 'untitled';
+  projectName.value = canvasStore.board.name ? canvasStore.board.name : 'untitled';
 });
 </script>
 
