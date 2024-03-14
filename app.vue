@@ -1,7 +1,7 @@
 <template>
   <div class="select-none">
     <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
   </div>
 </template>

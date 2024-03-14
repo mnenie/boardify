@@ -10,9 +10,9 @@ const emit = defineEmits<{
 const projectName = ref('')
 const canvasStore = useCanvasStore();
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await canvasStore.getBoard();
-  projectName.value = canvasStore.board.name!;
+  projectName.value = canvasStore.board.name! ? canvasStore.board.name! : 'untitled';
 });
 </script>
 
