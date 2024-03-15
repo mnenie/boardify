@@ -98,5 +98,7 @@ const { width, height } = useWindowSize()
     <WhiteboardMode />
     <WhiteboardDrawItems />
   </div>
-  <ScreenNotAvailable v-else />
+  <div v-else class="h-screen w-full flex justify-center">
+    <ScreenNotAvailable />
+  </div>
 </template>

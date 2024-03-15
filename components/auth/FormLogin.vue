@@ -70,7 +70,7 @@ const onSubmit = handleSubmit(async (values) => {
     </UiFormField>
     <div class="flex justify-between items-center flex-col space-y-2 mb-6">
       <UiButton @click="onSubmit" class="w-full">Sign In With Email</UiButton>
-      <p class="text-gray-500 text-sm">
+      <p class="text-gray-500 text-sm text-center">
         Don't have an account?
         <span
           @click="router.push(REGISTRATION_ROUTE)"
