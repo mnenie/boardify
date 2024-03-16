@@ -9,7 +9,7 @@ const onGitHubSubmit = async () => {
 </script>
 
 <template>
-  <UiButton @click="onGitHubSubmit" :variant="'outline'" class="w-full gap-2 flex items-center">
+  <UiButton @click="onGitHubSubmit" :variant="'outline'" :disabled="authStore.isLoading" class="w-full gap-2 flex items-center">
     <NuxtImg width="16" height="16" src="/icons/github-mark.svg" />
     GitHub
   </UiButton>

@@ -3,6 +3,7 @@ import { toTypedSchema } from '@vee-validate/zod';
 import * as z from 'zod';
 import { useForm } from 'vee-validate';
 import { toast } from 'vue-sonner';
+import { Loader2 } from 'lucide-vue-next'
 
 const authStore = useAuthStore();
 const canvasStore = useCanvasStore();
@@ -44,12 +45,7 @@ const onSubmit = handleSubmit(async (values) => {
       <UiFormItem class="mb-4" v-auto-animate>
         <UiFormLabel>Email</UiFormLabel>
         <UiFormControl>
-          <UiInput
-            type="email"
-            placeholder="Enter your email"
-            v-bind="componentField"
-            v-model="emailReg"
-          />
+          <UiInput type="email" placeholder="Enter your email" v-bind="componentField" v-model="emailReg" />
         </UiFormControl>
         <UiFormMessage />
       </UiFormItem>
@@ -58,25 +54,20 @@ const onSubmit = handleSubmit(async (values) => {
       <UiFormItem class="mb-8" v-auto-animate>
         <UiFormLabel>Password</UiFormLabel>
         <UiFormControl>
-          <UiInput
-            type="password"
-            placeholder="Enter your password"
-            v-bind="componentField"
-            v-model="passwordReg"
-          />
+          <UiInput type="password" placeholder="Enter your password" v-bind="componentField" v-model="passwordReg" />
         </UiFormControl>
         <UiFormMessage />
       </UiFormItem>
     </UiFormField>
     <div class="flex justify-between items-center flex-col space-y-2 mb-6">
-      <UiButton @click="onSubmit" class="w-full">Sign Up With Email</UiButton>
+      <UiButton @click="onSubmit" :disabled="authStore.isLoading" class="w-full">
+        <Loader2 v-if="authStore.isLoading" class="w-4 h-4 mr-2 animate-spin" />
+        Sign Up With Email
+      </UiButton>
       <p class="text-gray-500 text-sm text-center">
         Have an account?
-        <span
-          @click="router.push(LOGIN_ROUTE)"
-          class="text-gray-950 cursor-pointer border-solid border-b border-gray-950"
-          >Sign In Now</span
-        >
+        <span @click="router.push(LOGIN_ROUTE)"
+          class="text-gray-950 cursor-pointer border-solid border-b border-gray-950">Sign In Now</span>
       </p>
     </div>
     <AuthAdditional />

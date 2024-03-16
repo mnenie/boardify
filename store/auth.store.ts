@@ -8,6 +8,7 @@ export const useAuthStore = defineStore('auth', () => {
   const router = useRouter();
   const token = useCookie('token');
   const error = ref('');
+  const isLoading = ref(false)
 
   const {
     onFirebaseRegistration,
@@ -19,22 +20,26 @@ export const useAuthStore = defineStore('auth', () => {
 
   const login = async (email: string, password: string) => {
     try {
+      isLoading.value = true
       const response = await onFirebaseLogin(email, password);
       //@ts-ignore
       token.value = response?.user.accessToken;
       if (token.value) {
         await router.push(HOME_ROUTE);
       }
+      isLoading.value = false;
     } catch (err: any) {
       switch (err.message) {
         case Error.INVALID_CREDS:
           error.value = 'Account was not found, please try again';
           break;
       }
+      isLoading.value = false
     }
   };
   const registration = async (email: string, password: string) => {
     try {
+      isLoading.value = true
       const response = await onFirebaseRegistration(email, password);
       user.value = { email, id: response?.user.uid! };
       //@ts-ignore
@@ -42,12 +47,14 @@ export const useAuthStore = defineStore('auth', () => {
       if (token.value) {
         await router.push(HOME_ROUTE);
       }
+      isLoading.value = false;
     } catch (err: any) {
       switch (err.message) {
         case Error.EMAIL_EXISTS:
           error.value = 'Email already exists';
           break;
       }
+      isLoading.value = false
     }
   };
 
@@ -67,6 +74,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const gitHubSession = async () => {
     try {
+      isLoading.value = true
       const response = await onGitHubLogin();
       user.value = {
         id: response?.user.uid!,
@@ -79,7 +87,9 @@ export const useAuthStore = defineStore('auth', () => {
       if (token.value) {
         await router.push(HOME_ROUTE);
       }
+      isLoading.value = false
     } catch (err) {
+      isLoading.value = false
       console.log(err);
     }
   };
@@ -100,6 +110,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   return {
     user,
+    isLoading,
     error,
     registration,
     logout,
